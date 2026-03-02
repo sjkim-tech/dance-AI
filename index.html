@@ -82,28 +82,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Google Form Iframe Container */
-        .form-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 180%; /* Adjusted for longer forms on mobile */
-            height: 0;
-            overflow: hidden;
-            border-radius: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .form-container {
-                padding-bottom: 1200px; /* Sufficient height for desktop */
-            }
-        }
-        .form-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -304,26 +282,27 @@
         </div>
     </section>
 
-    <!-- Embedded Google Survey Section -->
-    <section id="survey" class="py-24 px-6 bg-stone-50 reveal-section">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-black text-stone-900 mb-4">강의 수요조사</h2>
-                <p class="text-stone-600">학습자님의 기대와 목표를 반영하기 위해 아래 설문을 작성해 주세요.</p>
+    <!-- Survey Call-to-Action Section -->
+    <section id="survey" class="py-32 px-6 bg-stone-50 reveal-section">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="mb-12">
+                <h2 class="text-5xl font-black text-stone-900 mb-6">강의 수요조사</h2>
+                <p class="text-xl text-stone-600 leading-relaxed max-w-2xl mx-auto">
+                    본 강의에 대한 학습자님의 기대와 목표를 파악하여 더 나은 수업을 만들고자 합니다. 아래 버튼을 눌러 설문에 참여해 주세요.
+                </p>
             </div>
             
-            <div class="bg-white rounded-3xl shadow-xl border border-stone-200 overflow-hidden">
-                <div class="form-container">
-                    <!-- Updated Google Form Embed with correct formatting -->
-                    <iframe src="https://forms.gle/zmHji6rsyDvmagru5">
-                        로드 중…
-                    </iframe>
-                </div>
+            <div class="flex justify-center">
+                <a href="https://forms.gle/zmHji6rsyDvmagru5" target="_blank" class="group relative inline-flex items-center justify-center px-12 py-8 font-black text-white transition-all bg-terracotta-600 rounded-3xl hover:bg-terracotta-500 hover:shadow-2xl shadow-xl transform hover:-translate-y-2 active:scale-95">
+                    <span class="text-2xl mr-4">📝</span>
+                    <span class="text-2xl">설문지 작성하기 (새 창)</span>
+                    <span class="ml-4 text-xl group-hover:translate-x-2 transition-transform">&#8594;</span>
+                </a>
             </div>
-            <div class="text-center mt-6">
-                <p class="text-sm text-stone-400 mb-4">프레임 내에서 설문이 보이지 않는다면?</p>
-                <a href="https://forms.gle/zmHji6rsyDvmagru5" target="_blank" class="text-terracotta-600 font-bold hover:underline">새 창에서 설문지 열기 &#8599;</a>
-            </div>
+            
+            <p class="mt-12 text-stone-400 text-sm italic">
+                * 설문 응답은 익명으로 처리되며 수업 구성의 기초 자료로만 활용됩니다.
+            </p>
         </div>
     </section>
 
