@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>컴퓨터의 눈 — 관절</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--paper:#FBFAF7;--ink:#1B2A41;--ink-2:#4A5568;--ink-3:#8A94A6;--line:#DDD8CF;--well:#F1EEE7;--coral:#E8674B;--teal:#2A9D8F;--amber:#D99A00;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Gowun Dodum','Malgun Gothic',sans-serif}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+.zh{display:block;font-size:.78em;color:var(--ink-3)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+header h1{font-size:26px;font-weight:400;line-height:1.25}
+header h1 .zh{font-size:14px;margin-top:2px}
+.course{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right;line-height:1.7}
+.lead{font-size:14px;color:var(--ink-2);margin-bottom:20px;line-height:1.7;max-width:760px}
+.lead b{font-weight:400;color:var(--ink);font-family:var(--mono)}
+
+.grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+section{margin-bottom:18px}
+.sec-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.sec-h h2{font-size:17px;font-weight:400}
+.sec-h h2 .zh{display:inline;margin-left:8px}
+.sec-h .hint{margin-left:auto;font-size:12px;color:var(--ink-3)}
+
+.cam{position:relative;background:#111;border-radius:8px;overflow:hidden;aspect-ratio:4/3;border:1px solid var(--line)}
+.cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.cam canvas{position:absolute;inset:0;width:100%;height:100%;transform:scaleX(-1)}
+.cover{position:absolute;inset:0;background:rgba(27,42,65,.94);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;z-index:2}
+.cover p{font-size:14px;line-height:1.7;opacity:.9}.cover .zh{color:rgba(255,255,255,.6)}
+.btn{border:1.5px solid var(--ink);background:#fff;border-radius:6px;padding:9px 16px;font-size:14px;line-height:1.3}
+.btn:hover{background:var(--ink);color:#fff}
+.btn .zh{display:inline;margin-left:6px;color:inherit;opacity:.7}
+.badge{position:absolute;top:10px;left:10px;z-index:1;font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.55);color:#fff;padding:3px 8px;border-radius:4px}
+.badge.on{background:rgba(42,157,143,.85)}
+.fps{position:absolute;top:10px;right:10px;z-index:1;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.7)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.toggle{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:6px;padding:6px 11px;background:#fff;font-size:13px}
+.toggle.on{border-color:var(--ink);background:var(--well)}
+.toggle .dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink)}
+.toggle.on .dot{background:var(--ink)}
+
+.skels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.skel{border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}
+.skel .t{display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;border-bottom:1px solid var(--line);font-size:13px}
+.skel .t .zh{display:inline;margin-left:6px}
+.skel .t code{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.skel canvas{display:block;width:100%;aspect-ratio:3/4;background:#FFFDF9}
+.skel-cap{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:8px}
+
+.nums{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px 14px}
+.nums .t{font-size:13px;color:var(--ink-2);margin-bottom:8px}
+.nums .t b{font-weight:400;color:var(--ink);font-family:var(--mono)}
+.numgrid{display:grid;grid-template-columns:repeat(17,1fr);gap:3px}
+.nc{font-family:var(--mono);font-size:9.5px;text-align:center;line-height:1.5;padding:3px 0;border-radius:3px;background:var(--well)}
+.nc .nm{color:var(--ink-3);font-size:8.5px;font-family:var(--sans);white-space:nowrap;overflow:hidden}
+.nc .x,.nc .y{color:var(--ink)}
+.nc.low{opacity:.35}
+
+.noise{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px 14px}
+.noise .t{font-size:13px;color:var(--ink-2);margin-bottom:8px;display:flex;justify-content:space-between}
+.noise .t .zh{display:inline;margin-left:6px}
+.nbars{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;height:74px;align-items:end}
+.nb{display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.nb .bw{width:100%;flex:1;background:var(--well);border-radius:3px;display:flex;align-items:flex-end;overflow:hidden}
+.nb .bf{width:100%;height:0;background:var(--teal);transition:height .15s}
+.nb .nm{font-size:10px;color:var(--ink-3);white-space:nowrap}
+
+.snaps{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.snap{border:1px solid var(--line);border-radius:6px;padding:5px 10px;font-size:12px;background:#fff;font-family:var(--mono)}
+.snap.sel{border-color:var(--amber);background:#FFF8E5}
+.foot{margin-top:22px;font-size:12px;color:var(--ink-3);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>컴퓨터의 눈 — 관절<span class="zh">计算机的眼睛 — 关节</span></h1>
+  <div class="course">Dance &amp; AI · 5주차 · 실습 1</div>
+</header>
+<p class="lead">지난주엔 사진이 픽셀 숫자 <b>50,176칸</b>이었습니다. 오늘 컴퓨터가 받는 것은 관절 <b>17개 × (x, y) = 숫자 34개</b>뿐입니다. 옷·배경·얼굴은 없습니다.
+<span class="zh">上周照片是 50,176 格像素数字。今天计算机收到的只有 17 个关节 ×(x, y)= 34 个数字。没有衣服、背景和脸。</span></p>
+
+<div class="grid">
+<div>
+  <section>
+    <div class="cam" id="cam">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="ov"></canvas>
+      <span class="badge" id="badge">관절 없음</span><span class="fps" id="fps"></span>
+      <div class="cover" id="cover">
+        <p>전신이 보이게 2m 정도 떨어져 주세요<span class="zh">请后退约 2 米，让全身入镜</span></p>
+        <button class="btn" onclick="startCam()">카메라 켜기<span class="zh">打开摄像头</span></button>
+      </div>
+    </div>
+    <div class="tools">
+      <button class="toggle on" id="tName" onclick="tog('name',this)"><span class="dot"></span>관절 이름<span class="zh" style="display:inline;margin-left:4px">名称</span></button>
+      <button class="toggle on" id="tXY" onclick="tog('xy',this)"><span class="dot"></span>좌표 숫자<span class="zh" style="display:inline;margin-left:4px">坐标</span></button>
+      <button class="toggle" id="tVideo" onclick="tog('hide',this)"><span class="dot"></span>영상 끄기 (뼈대만)<span class="zh" style="display:inline;margin-left:4px">只看骨架</span></button>
+    </div>
+  </section>
+
+  <section>
+    <div class="nums">
+      <div class="t">모델에 들어가는 숫자 34개 (정규화 후) <b id="numTag">—</b><span class="zh">进入模型的 34 个数字（归一化后）</span></div>
+      <div class="numgrid" id="numgrid"></div>
+    </div>
+  </section>
+</div>
+
+<div>
+  <section>
+    <div class="sec-h"><h2>정규화<span class="zh">归一化</span></h2><span class="hint">가까이 / 멀리 서 보세요</span></div>
+    <div class="skels">
+      <div class="skel"><div class="t"><span>정규화 전<span class="zh">归一化前</span></span><code>화면 좌표 0~1</code></div><canvas id="skRaw"></canvas></div>
+      <div class="skel"><div class="t"><span>정규화 후<span class="zh">归一化后</span></span><code>엉덩이 = 0, 어깨폭 = 1</code></div><canvas id="skNorm"></canvas></div>
+    </div>
+    <div class="skel-cap">왼쪽은 카메라에서 멀어지면 작아지고 옆으로 가면 움직입니다. 오른쪽은 엉덩이를 원점으로, 어깨폭을 1로 맞춰서 같은 자세면 같은 그림입니다. 학습 전에 데이터를 이렇게 손봅니다.
+      <span class="zh">左边离摄像头远了就变小、走到旁边就移动。右边以髋部为原点、肩宽为 1，只要姿势相同图就相同。训练前会这样处理数据。</span></div>
+    <div class="snaps">
+      <button class="btn" style="padding:6px 12px;font-size:13px" onclick="takeSnap()">자세 저장<span class="zh">保存姿势</span></button>
+      <span id="snapList"></span>
+      <span style="font-size:12px;color:var(--ink-3)">저장한 자세를 누르면 노란색으로 겹쳐 비교합니다</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="noise">
+      <div class="t"><span>관절 떨림 — 최근 1초<span class="zh">关节抖动 — 最近 1 秒</span></span><span style="color:var(--ink-3);font-size:12px">빨강 = 이 관절을 믿기 어려움</span></div>
+      <div class="nbars" id="nbars"></div>
+    </div>
+  </section>
+</div>
+</div>
+
+<p class="foot">해볼 것: ① 카메라에서 멀어졌다 가까워지기 — 오른쪽 그림은 그대로인가? ② 팔을 빠르게 흔들기 — 손목 막대가 어떻게 되나? ③ 뒤돌아서기, 쪼그려 앉기 — 어느 관절이 사라지나?
+<span class="zh">试一试：① 离摄像头远一点再近一点——右图是否不变？② 快速挥动手臂——手腕的柱子怎么样？③ 转身、蹲下——哪些关节消失了？</span></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js"></script>
+<script>
+const JN=['코','왼눈(안)','왼눈','왼눈(바)','오른눈(안)','오른눈','오른눈(바)','왼귀','오른귀','입(왼)','입(오)','왼어깨','오른어깨','왼팔꿈치','오른팔꿈치','왼손목','오른손목','왼새끼','오른새끼','왼검지','오른검지','왼엄지','오른엄지','왼엉덩이','오른엉덩이','왼무릎','오른무릎','왼발목','오른발목','왼뒤꿈치','오른뒤꿈치','왼발끝','오른발끝'];
+const KEY_IDX=[0,2,5,7,8,11,12,13,14,15,16,23,24,25,26,27,28];
+const SHORT=['코','왼눈','오른눈','왼귀','오른귀','왼어깨','오른어깨','왼팔꿈','오른팔꿈','왼손목','오른손목','왼엉덩','오른엉덩','왼무릎','오른무릎','왼발목','오른발목'];
+const CONN=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28],[0,2],[0,5],[2,7],[5,8]];
+const NOISE_IDX=[0,11,12,13,14,15,16,23,24,27,28], NOISE_NM=['코','왼어깨','오른어깨','왼팔꿈','오른팔꿈','왼손목','오른손목','왼엉덩','오른엉덩','왼발목','오른발목'];
+const opts={name:true,xy:true,hide:false};
+let curLM=null,snaps=[],sel=null,hist=Array(33).fill(null).map(()=>[]),mpPose=null,camOn=false,proc=false,fc=0,lastT=performance.now();
+const video=document.getElementById('video'),ov=document.getElementById('ov'),octx=ov.getContext('2d');
+const skRaw=document.getElementById('skRaw'),skNorm=document.getElementById('skNorm');
+const $=id=>document.getElementById(id);
+
+(function init(){
+  const g=$('numgrid');KEY_IDX.forEach((_,k)=>{g.innerHTML+=`<div class="nc" id="nc${k}"><div class="nm">${SHORT[k]}</div><div class="x">—</div><div class="y">—</div></div>`;});
+  const nb=$('nbars');NOISE_IDX.forEach((_,i)=>{nb.innerHTML+=`<div class="nb"><div class="bw"><div class="bf" id="nb${i}"></div></div><div class="nm">${NOISE_NM[i]}</div></div>`;});
+})();
+function tog(k,btn){opts[k]=!opts[k];btn.classList.toggle('on',opts[k]);if(k==='hide')video.style.opacity=opts.hide?0:1;}
+
+async function startCam(){
+  try{const s=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'},audio:false});
+    video.srcObject=s;await video.play();$('cover').style.display='none';camOn=true;initMP();}
+  catch(e){$('cover').querySelector('p').textContent='카메라 오류: '+e.message;}
+}
+function initMP(){
+  if(typeof Pose==='undefined'){setTimeout(initMP,300);return;}
+  mpPose=new Pose({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`});
+  mpPose.setOptions({modelComplexity:1,smoothLandmarks:true,enableSegmentation:false,minDetectionConfidence:0.5,minTrackingConfidence:0.5});
+  mpPose.onResults(onResults);loop();
+}
+async function loop(){
+  if(!camOn||!mpPose)return;
+  if(!proc&&video.readyState>=2){proc=true;try{await mpPose.send({image:video});}catch(e){}proc=false;}
+  fc++;const now=performance.now();if(now-lastT>=1000){$('fps').textContent=fc+' fps';fc=0;lastT=now;}
+  setTimeout(loop,33);
+}
+function normalize(lm){
+  const lH=lm[23],rH=lm[24],lS=lm[11],rS=lm[12];
+  const cx=(lH.x+rH.x)/2,cy=(lH.y+rH.y)/2;
+  const scale=Math.max(Math.hypot(rS.x-lS.x,rS.y-lS.y),Math.hypot((lS.x+rS.x)/2-cx,(lS.y+rS.y)/2-cy))||0.1;
+  return lm.map(l=>({x:(l.x-cx)/scale,y:(l.y-cy)/scale,visibility:l.visibility}));
+}
+function onResults(res){
+  const W=ov.width=video.videoWidth||640,H=ov.height=video.videoHeight||480;
+  octx.clearRect(0,0,W,H);
+  if(opts.hide){octx.fillStyle='#111';octx.fillRect(0,0,W,H);}
+  if(res.poseLandmarks&&res.poseLandmarks.length){
+    curLM=res.poseLandmarks;$('badge').textContent='관절 감지됨';$('badge').classList.add('on');
+    curLM.forEach((l,i)=>{hist[i].push([l.x,l.y]);if(hist[i].length>30)hist[i].shift();});
+    drawCam(W,H);drawSkels();updateNums();updateNoise();
+  }else{curLM=null;$('badge').textContent='관절 없음';$('badge').classList.remove('on');}
+}
+function drawCam(W,H){
+  const lm=curLM,nm=normalize(lm);
+  octx.lineWidth=2.5;octx.lineCap='round';
+  CONN.forEach(([a,b])=>{if(lm[a].visibility<0.3||lm[b].visibility<0.3)return;octx.strokeStyle=opts.hide?'rgba(255,255,255,.7)':'rgba(232,103,75,.8)';
+    octx.beginPath();octx.moveTo(lm[a].x*W,lm[a].y*H);octx.lineTo(lm[b].x*W,lm[b].y*H);octx.stroke();});
+  KEY_IDX.forEach((i,k)=>{const l=lm[i];if(l.visibility<0.2)return;const v=Math.max(0,Math.min(1,l.visibility));
+    octx.beginPath();octx.arc(l.x*W,l.y*H,5.5,0,Math.PI*2);octx.fillStyle=`rgba(255,255,255,${0.3+0.7*v})`;octx.fill();
+    if(!opts.hide){octx.strokeStyle='#E8674B';octx.lineWidth=2;octx.stroke();}
+    if(!(opts.name||opts.xy))return;
+    const lines=[];if(opts.name)lines.push(`${i} ${SHORT[k]}`);if(opts.xy)lines.push(`${nm[i].x.toFixed(2)}, ${nm[i].y.toFixed(2)}`);
+    octx.save();octx.translate(l.x*W-8,l.y*H-8);octx.scale(-1,1);octx.font='11px IBM Plex Mono, monospace';
+    const tw=Math.max(...lines.map(s=>octx.measureText(s).width))+8;
+    octx.fillStyle='rgba(0,0,0,.6)';octx.fillRect(0,-12,tw,lines.length*13+4);octx.fillStyle='#fff';
+    lines.forEach((s,j)=>octx.fillText(s,4,j*13));octx.restore();
+  });
+}
+function drawSkels(){
+  [[skRaw,false,'#8A94A6'],[skNorm,true,'#E8674B']].forEach(([cv,doNorm,color])=>{
+    const W=cv.width=cv.clientWidth*devicePixelRatio,H=cv.height=cv.clientHeight*devicePixelRatio;
+    const ctx=cv.getContext('2d');ctx.clearRect(0,0,W,H);
+    const draw=(lm,col,lw,r)=>{
+      const pts=doNorm?normalize(lm):lm;
+      let toX,toY;
+      if(doNorm){const s=Math.min(W,H)/5;toX=x=>W/2-x*s;toY=y=>H*0.62+y*s;}
+      else{const s=Math.min(W/1,H/1);toX=x=>W-(x*W);toY=y=>y*H;}
+      ctx.lineWidth=lw;ctx.lineCap='round';ctx.strokeStyle=col;
+      CONN.forEach(([a,b])=>{if(lm[a].visibility<0.3||lm[b].visibility<0.3)return;ctx.beginPath();ctx.moveTo(toX(pts[a].x),toY(pts[a].y));ctx.lineTo(toX(pts[b].x),toY(pts[b].y));ctx.stroke();});
+      KEY_IDX.forEach(i=>{if(lm[i].visibility<0.2)return;ctx.beginPath();ctx.arc(toX(pts[i].x),toY(pts[i].y),r,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();});
+    };
+    if(doNorm){ctx.strokeStyle='#E7E3DB';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,H*0.62);ctx.lineTo(W,H*0.62);ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();}
+    if(sel)draw(sel,'rgba(217,154,0,.55)',2*devicePixelRatio,3*devicePixelRatio);
+    draw(curLM,color,2.5*devicePixelRatio,4*devicePixelRatio);
+  });
+}
+function updateNums(){
+  const nm=normalize(curLM);let n=0;
+  KEY_IDX.forEach((i,k)=>{const el=$('nc'+k);const low=curLM[i].visibility<0.5;el.classList.toggle('low',low);if(!low)n++;
+    el.querySelector('.x').textContent=nm[i].x.toFixed(2);el.querySelector('.y').textContent=nm[i].y.toFixed(2);});
+  $('numTag').textContent=`${n}/17 관절 신뢰`;
+}
+function updateNoise(){
+  NOISE_IDX.forEach((ji,ni)=>{const h=hist[ji];if(h.length<2)return;let s=0;for(let k=1;k<h.length;k++)s+=Math.hypot(h[k][0]-h[k-1][0],h[k][1]-h[k-1][1]);
+    const pct=Math.min(100,(s/(h.length-1))*2000);const bar=$('nb'+ni);bar.style.height=pct+'%';bar.style.background=pct>50?'#E8674B':pct>20?'#D99A00':'#2A9D8F';});
+}
+function takeSnap(){
+  if(!curLM)return;const id=snaps.length+1;snaps.push({id,lm:JSON.parse(JSON.stringify(curLM))});
+  const b=document.createElement('button');b.className='snap';b.textContent='자세 '+id;b.onclick=()=>{sel=(sel===snaps[id-1].lm)?null:snaps[id-1].lm;document.querySelectorAll('.snap').forEach((x,j)=>x.classList.toggle('sel',sel===snaps[j].lm));};
+  $('snapList').appendChild(b);
+}
+</script>
+</body>
+</html>
