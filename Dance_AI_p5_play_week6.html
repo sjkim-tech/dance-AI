@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>p5.js 그려보기 — 6주차</title>
+<title>더 놀아보기 — 6주차</title>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -55,7 +55,7 @@ pre.code{margin:0;padding:12px 14px;font-family:var(--mono);font-size:12px;line-
 .ex-r .ph .zh{color:rgba(255,255,255,.5)}
 .ex-r .ph .btn{margin-top:10px;background:transparent;color:#fff;border-color:#fff}
 .ex-r .ph .btn:hover{background:#fff;color:var(--ink)}
-.next{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:8px}
+.next{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
 .fsbtn{position:absolute;top:10px;right:10px;z-index:3;border:none;background:rgba(0,0,0,.6);color:#fff;border-radius:4px;padding:4px 9px;font-size:12px;font-family:var(--mono)}
 .fsbtn:hover{background:rgba(0,0,0,.85)}
 .ex-r:fullscreen{min-height:0}
@@ -66,8 +66,8 @@ pre.code{margin:0;padding:12px 14px;font-family:var(--mono);font-size:12px;line-
 <div class="wrap">
 
 <header>
-  <h1>p5.js 그려보기<span class="zh">用 p5.js 画画</span></h1>
-  <div class="course">Dance &amp; AI · 6주차 · 실습 1</div>
+  <h1>더 놀아보기<span class="zh">再玩一玩</span></h1>
+  <div class="course">Dance &amp; AI · 6주차 · 실습 1 · 더 놀아보기</div>
 </header>
 
 <div class="how">
@@ -79,21 +79,27 @@ pre.code{margin:0;padding:12px 14px;font-family:var(--mono);font-size:12px;line-
 
 <div id="list"></div>
 
-<div class="next"><a class="btn" href="Dance_AI_p5_play_week6.html">더 놀아보기 · 예제 5개 →<span class="zh">再玩一玩 · 5 个例子</span></a><a class="btn" href="Dance_AI_p5_model_week6.html">다음: 실습 2 · 동작 모델 연결 →<span class="zh">下一步:实习 2 · 连接动作模型</span></a></div>
+<div class="next"><a class="btn" href="Dance_AI_p5_week6.html">← 실습 1 · p5.js 그려보기<span class="zh">实习 1 · 用 p5.js 画画</span></a><a class="btn" href="Dance_AI_p5_model_week6.html">다음: 실습 2 · 동작 모델 연결 →<span class="zh">下一步:实习 2 · 连接动作模型</span></a></div>
 </div>
 
 <script>
 const EX=[
-  {f:'01_text.js',ko:'텍스트',zh:'文字',
-   d:'글자가 떨어지다가 어두운 곳(몸)에 닿으면 멈춥니다. 밝은 벽 앞에서 해보세요. TEXT와 DARK를 바꿔 보세요.',
-   dz:'文字落下,碰到暗的地方(身体)就停住。请在明亮的墙前尝试。试着修改 TEXT 和 DARK。',
-   ref:['Text Rain — Camille Utterback & Romy Achituv, 1999','https://camilleutterback.com/projects/text-rain/']},
-  {f:'02_draw.js',ko:'드로잉',zh:'绘画',
-   d:'몸이 움직인 자리가 쌓여 그림이 됩니다. C 키로 지웁니다. MOVE를 바꾸면 반응하는 정도가 달라집니다.',
-   dz:'身体移动过的地方会累积成画。按 C 键清除。修改 MOVE,反应程度会不同。'},
-  {f:'03_particle.js',ko:'파티클',zh:'粒子',
-   d:'고른 신체 부위에서 파티클이 나옵니다. 화면의 관절 점을 클릭하면 부위가 바뀝니다. 코드 아래쪽은 관절을 찾는 부분이라 고치지 않아도 됩니다.',
-   dz:'从选中的身体部位喷出粒子。点击画面上的关节点就会换部位。代码下面是寻找关节的部分,不需要修改。'},
+  {f:'04_mirror.js',ko:'픽셀 거울',zh:'像素镜子',
+   d:'카메라 화면을 칸으로 나누고, 밝은 칸일수록 큰 모양으로 다시 그립니다. CELL로 칸 크기를, SHAPE로 모양을 바꿔 보세요. \'text\'로 하면 TEXT의 글자로 그립니다.',
+   dz:'把摄像头画面分成格子,越亮的格子画出越大的形状。用 CELL 改格子大小,用 SHAPE 改形状。改成 \'text\' 就用 TEXT 的文字来画。',
+   ref:['Wooden Mirror — Daniel Rozin, 1999','https://www.smoothware.com/danny/woodenmirror.html']},
+  {f:'05_slitscan.js',ko:'슬릿스캔',zh:'狭缝扫描',
+   d:'화면의 세로줄 하나만 잘라 옆으로 쌓습니다. 시간이 가로로 펼쳐집니다. 천천히 움직이면 몸이 늘어나고, 빨리 움직이면 좁아집니다. SPEED와 SLIT을 바꿔 보세요. C 키로 지웁니다.',
+   dz:'只切下画面里的一条竖线,往旁边堆叠。时间被横向展开。慢慢动身体会被拉长,快速动会变窄。试着修改 SPEED 和 SLIT。按 C 键清除。'},
+  {f:'06_delay.js',ko:'잔상',zh:'残影',
+   d:'조금 전의 내가 여러 겹으로 따라옵니다. 혼자 추는 춤이 군무처럼 보입니다. DELAY는 겹 사이 시간, COPIES는 겹의 수입니다.',
+   dz:'刚才的我分成好几层跟过来。一个人的舞看起来像群舞。DELAY 是层与层之间的时间,COPIES 是层数。'},
+  {f:'07_hand.js',ko:'손으로 그리기',zh:'用手画画',
+   d:'엄지와 손가락 끝을 붙이면 그려지고, 떼면 멈춥니다. 두 손을 함께 쓸 수 있습니다. FINGER로 붓이 될 손가락을, SIZE로 굵기를 바꿔 보세요. C 키로 지웁니다. 전신이 안 보이는 자리에서도 됩니다.',
+   dz:'拇指和手指尖碰在一起就画,分开就停。可以同时用两只手。用 FINGER 换当画笔的手指,用 SIZE 改粗细。按 C 键清除。看不到全身的地方也可以。'},
+  {f:'08_face.js',ko:'얼굴로 글자 불기',zh:'用脸吹出文字',
+   d:'입을 벌리면 입에서 글자가 흘러나옵니다. 크게 벌릴수록 많이, 멀리 나갑니다. TEXT를 내 문장으로 바꾸고, 잘 안 나오면 OPEN을 작게 해 보세요.',
+   dz:'张开嘴,文字就从嘴里流出来。张得越大,出来得越多、越远。把 TEXT 换成自己的句子,不容易出来时把 OPEN 调小。'},
 ];
 const src={};
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -125,7 +131,7 @@ async function preview(i){
 document.addEventListener('fullscreenchange',()=>{document.querySelectorAll('.fsbtn').forEach(b=>b.textContent=document.fullscreenElement?'✕ 닫기':'⛶ 큰 화면');});
 document.getElementById('list').innerHTML=EX.map((e,i)=>`<div class="ex">
   <div class="ex-l">
-    <div class="ex-h"><span class="no">0${i+1}</span>
+    <div class="ex-h"><span class="no">0${i+4}</span>
       <div class="t"><b>${e.ko}</b><span class="zh">${e.zh}</span><p>${e.d}<span class="zh">${e.dz}</span></p>${e.ref?`<p>참고 / 参考: <a href="${e.ref[1]}" target="_blank" rel="noopener">${e.ref[0]}</a></p>`:''}</div>
       <button class="btn primary" onclick="copyCode('${e.f}',this)">코드 복사<span class="zh">复制代码</span></button>
     </div>
