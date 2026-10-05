@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>동작 모델 연결 — 6주차</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--paper:#FBFAF7;--ink:#1B2A41;--ink-2:#4A5568;--ink-3:#8A94A6;--line:#DDD8CF;--well:#F1EEE7;--coral:#E8674B;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Gowun Dodum','Malgun Gothic',sans-serif}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+button,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.zh{display:block;font-size:.78em;color:var(--ink-3)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+header h1{font-size:26px;font-weight:400;line-height:1.25}
+header h1 .zh{font-size:14px;margin-top:2px}
+.course{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right;line-height:1.7}
+code{font-family:var(--mono);font-size:12.5px;background:var(--well);padding:1px 5px;border-radius:3px}
+
+.map{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff;margin-bottom:26px}
+.map>div{padding:12px 16px;border-right:1px solid var(--line)}
+.map>div:last-child{border-right:none}
+.map .l{font-family:var(--mono);font-size:22px;color:var(--cc);line-height:1.1}
+.map .nm{font-size:12px;color:var(--ink-3);min-height:18px}
+.map .k{font-size:15px;margin-top:4px}
+.map .k .zh{display:inline;margin-left:6px}
+.map p{font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.map p .zh{font-size:11.5px}
+@media(max-width:820px){.map{grid-template-columns:1fr 1fr}.map>div{border-bottom:1px solid var(--line)}}
+
+.btn{border:1.5px solid var(--ink);background:#fff;border-radius:6px;padding:8px 14px;font-size:14px;line-height:1.3;transition:background .15s,color .15s;text-decoration:none;color:var(--ink);display:inline-flex;align-items:baseline;gap:6px}
+.btn:hover{background:var(--ink);color:#fff}
+.btn.primary{background:var(--coral);border-color:var(--coral);color:#fff}
+.btn.primary:hover{background:#C9502F;border-color:#C9502F}
+.btn .zh{display:inline;color:inherit;opacity:.7;font-size:.8em}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn.done{border-color:#1F7A6B;background:#1F7A6B;color:#fff}
+
+.grid{display:grid;grid-template-columns:420px 1fr;gap:22px;align-items:start}
+.grid>div{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.step{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.step h2{font-size:16px;font-weight:400;display:flex;gap:10px;align-items:baseline}
+.step h2 .n{font-family:var(--mono);font-size:13px;color:#fff;background:var(--coral);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.step h2 .zh{display:inline;font-size:12.5px}
+.step .body{margin:8px 0 0 34px;font-size:13.5px;color:var(--ink-2)}
+.step .body .zh{font-size:12px}
+.step .act{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+textarea.paste{width:100%;height:90px;resize:vertical;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-family:var(--mono);font-size:12px;background:var(--paper);line-height:1.5;margin-top:10px}
+.status{font-size:13px;margin-top:6px;color:var(--ink-2)}
+.status.ok{color:#1F7A6B}.status.warn{color:#B23A1E}
+.status .zh{font-size:11.5px}
+
+.codebox{border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}
+.codebox .top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--well);font-family:var(--mono);font-size:12px;color:var(--ink-2);flex-wrap:wrap}
+pre.code{margin:0;padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.6;overflow:auto;max-height:640px;color:var(--ink);tab-size:2}
+pre.code mark{background:#FFF3EF;color:var(--coral);border-radius:3px;padding:0 2px}
+
+.faq{margin-top:22px;font-size:13px;line-height:1.7}
+.faq h3{font-size:15px;font-weight:400;margin-bottom:6px}
+.faq h3 .zh{display:inline;margin-left:6px;font-size:12px}
+.faq table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--line);border-radius:8px}
+.faq td{border-top:1px solid var(--line);padding:7px 10px;vertical-align:top}
+.faq tr:first-child td{border-top:none}
+.faq td:first-child{white-space:nowrap;color:var(--coral);width:1%}
+.faq .zh{font-size:12px}
+.prev{margin-top:8px}
+</style>
+</head>
+<body>
+<script src="gnb.js"></script>
+<div class="wrap">
+
+<header>
+  <h1>동작 모델 연결<span class="zh">连接动作模型</span></h1>
+  <div class="course">Dance &amp; AI · 6주차 · 실습 2</div>
+</header>
+
+<div class="map" id="map"></div>
+
+<div class="grid">
+<div>
+  <div class="step">
+    <h2><span class="n">1</span>5주차에서 모델 복사<span class="zh">在第5周复制模型</span></h2>
+    <div class="body">동작 4개를 학습하고 [모델 복사]를 누릅니다. D는 가만히 서 있는 자세로 학습하세요.<span class="zh">训练 4 个动作后点击 [复制模型]。D 请用静止站立的姿势训练。</span>
+      <div class="act"><a class="btn sm" href="Dance_AI_pose_learning_week5.html" target="_blank">5주차 동작 학습 열기<span class="zh">打开第5周动作学习</span></a></div></div>
+  </div>
+  <div class="step">
+    <h2><span class="n">2</span>여기에 붙여넣기<span class="zh">粘贴到这里</span></h2>
+    <div class="body">Ctrl+V / ⌘V
+      <textarea class="paste" id="paste" spellcheck="false" placeholder="const POSE_MODEL = { … };"></textarea>
+      <div class="status" id="st">모델을 붙여 넣으면 오른쪽 코드에 들어갑니다<span class="zh">粘贴模型后会放进右边的代码</span></div></div>
+  </div>
+  <div class="step">
+    <h2><span class="n">3</span>코드 복사 → p5 에디터<span class="zh">复制代码 → p5 编辑器</span></h2>
+    <div class="body"><code>sketch.js</code>의 내용을 모두 지운 뒤 붙여 넣고 ▶ 를 누릅니다.<span class="zh">删除 sketch.js 的全部内容后粘贴,点击 ▶。</span>
+      <div class="act">
+        <button class="btn primary" id="copyBtn" onclick="copyCode()">코드 복사<span class="zh">复制代码</span></button>
+        <a class="btn sm" href="https://editor.p5js.org" target="_blank" rel="noopener">p5 에디터 열기<span class="zh">打开 p5 编辑器</span></a>
+      </div></div>
+  </div>
+
+  <div class="faq">
+    <h3>잘 안 될 때<span class="zh">不顺利时</span></h3>
+    <table>
+      <tr><td>모델 없음</td><td>2번에서 모델을 붙여 넣은 뒤 코드를 다시 복사하세요.<span class="zh">没有模型 — 在第 2 步粘贴模型后,重新复制代码。</span></td></tr>
+      <tr><td>사람이 안 보입니다</td><td>카메라에서 멀리 서서 몸 전체가 보이게 하세요.<span class="zh">看不到人 — 离摄像头远一点,让全身出现在画面中。</span></td></tr>
+      <tr><td>동작이 잘 안 바뀜</td><td>5주차에서 동작별로 더 찍고 다시 학습한 뒤, 1번부터 다시 하세요.<span class="zh">动作不太改变 — 在第5周为每个动作多拍一些,重新训练后从第 1 步重新开始。</span></td></tr>
+      <tr><td>S·C 키가 안 됨</td><td>실행 화면을 한 번 클릭한 뒤 누르세요.<span class="zh">S、C 键没反应 — 先点击一下运行画面再按。</span></td></tr>
+      <tr><td>화면이 검다</td><td>주소창 옆 카메라 아이콘에서 권한을 허용하세요.<span class="zh">画面是黑的 — 请在地址栏旁的摄像头图标中允许权限。</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div>
+  <div class="codebox">
+    <div class="top"><span>sketch.js</span><span id="lines"></span></div>
+    <pre class="code" id="code">불러오는 중…</pre>
+  </div>
+  <div class="prev"><a class="btn sm" href="Dance_AI_p5_week6.html">← 실습 1 · p5.js 그려보기<span class="zh">实习 1 · 用 p5.js 画画</span></a></div>
+</div>
+</div>
+</div>
+
+<script>
+const COLORS=['#E8674B','#2A9D8F','#4F5BD5','#D99A00'];
+const MAP=[
+  {k:'텍스트',z:'文字',d:'글자가 떨어져 몸에 걸림',dz:'文字落下挂在身上'},
+  {k:'드로잉',z:'绘画',d:'손이 지나간 자리에 선',dz:'手经过的地方留下线条'},
+  {k:'파티클',z:'粒子',d:'고른 부위에서 점이 나옴',dz:'从选中的部位喷出小点'},
+  {k:'가만히',z:'静止',d:'그림이 천천히 지워짐',dz:'画慢慢被擦掉'},
+];
+const KEY_IDX=[0,2,5,7,8,11,12,13,14,15,16,23,24,25,26,27,28];
+const MODEL_LINE='const POSE_MODEL = null;';
+let base='', model=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function renderMap(){
+  $('map').innerHTML=MAP.map((m,i)=>`<div style="--cc:${COLORS[i]}"><div class="l">${'ABCD'[i]}</div><div class="nm">${model?esc(model.classes[i]||''):''}</div><div class="k">${m.k}<span class="zh">${m.z}</span></div><p>${m.d}<span class="zh">${m.dz}</span></p></div>`).join('');
+}
+function fullCode(){
+  return model?base.replace(MODEL_LINE,'const POSE_MODEL = '+JSON.stringify(model)+';'):base;
+}
+function renderCode(){
+  let shown;
+  if(model){
+    const txt=JSON.stringify(model);
+    shown=esc(base).replace(MODEL_LINE,`<mark>const POSE_MODEL = ${esc(txt.slice(0,60))}… (${txt.length}자)</mark>`);
+  }else shown=esc(base).replace(MODEL_LINE,`<mark>${MODEL_LINE}</mark>`);
+  $('code').innerHTML=shown;
+  $('lines').textContent=fullCode().split('\n').length+' lines';
+}
+function parse(txt){
+  const a=txt.indexOf('{'),b=txt.lastIndexOf('}');
+  if(a<0||b<a)throw new Error('모델을 찾지 못했습니다');
+  const m=JSON.parse(txt.slice(a,b+1));
+  if(!Array.isArray(m.classes)||!Array.isArray(m.weights)||!Array.isArray(m.bias))throw new Error('classes · weights · bias가 없습니다');
+  const K=m.classes.length;
+  if(m.keyIdx&&m.keyIdx.join()!==KEY_IDX.join())throw new Error('관절 번호가 5주차와 다릅니다');
+  if(m.weights.length!==34*K||m.bias.length!==K)throw new Error('조절값 개수가 맞지 않습니다');
+  return m;
+}
+function onPaste(){
+  const txt=$('paste').value.trim(),st=$('st');
+  if(!txt){model=null;st.className='status';st.innerHTML='모델을 붙여 넣으면 오른쪽 코드에 들어갑니다<span class="zh">粘贴模型后会放进右边的代码</span>';}
+  else try{
+    model=parse(txt);st.className='status ok';
+    st.innerHTML=`모델이 코드에 들어갔습니다 — 동작 ${model.classes.length}개<span class="zh">模型已放进代码 — 动作 ${model.classes.length} 个</span>`;
+    try{localStorage.setItem('w6-model',txt);}catch(e){}
+  }catch(e){
+    model=null;st.className='status warn';
+    st.innerHTML=`${esc(e.message)}. 5주차에서 [모델 복사]를 다시 누르세요<span class="zh">模型格式不对。请在第5周重新点击 [复制模型]</span>`;
+  }
+  renderMap();renderCode();
+}
+async function copyCode(){
+  const btn=$('copyBtn');
+  try{await navigator.clipboard.writeText(fullCode());const o=btn.innerHTML;btn.classList.add('done');
+    btn.innerHTML=(model?'복사됨':'복사됨 (모델 없음)')+'<span class="zh">已复制</span>';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=o;},1800);}
+  catch(e){alert('복사하지 못했습니다. 코드를 직접 선택해 복사하세요.');}
+}
+$('paste').addEventListener('input',onPaste);
+
+(async()=>{
+  try{const r=await fetch('p5_week6/pose_model.js');if(!r.ok)throw 0;base=await r.text();}catch(e){base='// 파일을 불러오지 못했습니다';}
+  let saved=null;try{saved=localStorage.getItem('w6-model');}catch(e){}
+  if(saved){$('paste').value=saved;onPaste();}else{renderMap();renderCode();}
+})();
+</script>
+</body>
+</html>

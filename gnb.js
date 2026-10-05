@@ -6,6 +6,8 @@
         { href: 'Dance_AI_image_learning_week4_0922.html', label: 'Week 4 · 이미지 학습' },
         { href: 'Dance_AI_pose_eye_week5.html', label: 'Week 5 · 컴퓨터의 눈 — 관절' },
         { href: 'Dance_AI_pose_learning_week5.html', label: 'Week 5 · 동작 학습' },
+        { href: 'Dance_AI_p5_week6.html', label: 'Week 6 · p5.js 그려보기' },
+        { href: 'Dance_AI_p5_model_week6.html', label: 'Week 6 · 동작 모델 연결' },
     ];
     const LINKS = [
         { href: 'index.html#overview', label: 'Overview' },
