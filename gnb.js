@@ -2,7 +2,7 @@
 // 새 주차 페이지가 생기면 WORKSHOPS 배열에 한 줄 추가하세요. (index.html의 드롭다운도 함께 수정)
 (function () {
     const WORKSHOPS = [
-        { href: 'index.html#workshop', label: 'Week 1 · 오리엔테이션' },
+        { href: 'index.html#overview', label: 'Week 1 · 오리엔테이션' },
         { href: 'Dance_AI_image_learning_week4_0922.html', label: 'Week 4 · 이미지 학습' },
         { href: 'Dance_AI_pose_eye_week5.html', label: 'Week 5 · 컴퓨터의 눈 — 관절' },
         { href: 'Dance_AI_pose_learning_week5.html', label: 'Week 5 · 동작 학습' },
@@ -13,6 +13,7 @@
         { href: 'index.html#overview', label: 'Overview' },
         { href: 'index.html#objectives', label: 'Goals' },
         { href: 'index.html#identity', label: 'Identity' },
+        { href: 'index.html#instructor', label: 'Instructor' },
         { href: 'index.html#roadmap', label: 'Roadmap' },
     ];
 
@@ -36,6 +37,9 @@
 .gnb-list a:hover{background:#F1EEE7}
 .gnb-list a.on{color:#E8674B;font-weight:700}
 .gnb-survey{color:#E8674B!important;font-weight:700}
+.credit{max-width:1180px;margin:30px auto 0;padding:18px 22px 30px;border-top:1px solid #DDD8CF;font-family:'Gowun Dodum','Malgun Gothic',sans-serif;font-size:12px;line-height:1.7;color:#8A94A6;text-align:center}
+.credit b{color:#4A5568;font-weight:700}
+.credit a{color:inherit}
 @media(max-width:640px){.gnb-in{justify-content:center}.gnb-menu{justify-content:center;gap:14px}.gnb-list{right:auto;left:50%;transform:translateX(-50%)}}
 `;
     document.head.appendChild(style);
@@ -61,6 +65,13 @@
 
     const script = document.currentScript;
     script.parentNode.insertBefore(nav, script);
+
+    // 저작권 표기 (페이지 맨 아래) / 版权标记(页面最下方)
+    const credit = document.createElement('footer');
+    credit.className = 'credit';
+    credit.innerHTML = '<b>강의 · 교육자료 제작: 김서진</b> (<a href="https://www.abclab.kr" target="_blank" rel="noopener">ABC Lab</a>) · 무단 복제 및 배포를 금합니다.'
+        + '<br>讲课 · 教材制作:김서진 · 禁止擅自复制及传播。<br>© 2026 김서진 · Dance &amp; AI';
+    document.addEventListener('DOMContentLoaded', () => document.body.appendChild(credit));
 
     const btn = nav.querySelector('.gnb-btn');
     const list = nav.querySelector('.gnb-list');

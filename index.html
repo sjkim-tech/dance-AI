@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dance & AI 1주차: 오리엔테이션</title>
+    <title>Dance & AI 2026-2학기 오리엔테이션</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -94,6 +93,7 @@
                 <a href="#overview" class="hover:text-terracotta-600 transition-colors">Overview</a>
                 <a href="#objectives" class="hover:text-terracotta-600 transition-colors">Goals</a>
                 <a href="#identity" class="hover:text-terracotta-600 transition-colors">Identity</a>
+                <a href="#instructor" class="hover:text-terracotta-600 transition-colors">Instructor</a>
                 <a href="#roadmap" class="hover:text-terracotta-600 transition-colors">Roadmap</a>
                 <div class="relative" id="workshop-dropdown">
                     <button type="button" id="workshop-toggle" class="flex items-center gap-1 hover:text-terracotta-600 transition-colors" aria-haspopup="true" aria-expanded="false">
@@ -101,7 +101,7 @@
                         <svg class="w-3 h-3 transition-transform" id="workshop-caret" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div id="workshop-menu" class="hidden absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white border border-stone-200 rounded-lg shadow-lg py-2 text-left z-50">
-                        <a href="#workshop" class="block px-4 py-2 hover:bg-stone-100 hover:text-terracotta-600">Week 1 · 오리엔테이션</a>
+                        <a href="#overview" class="block px-4 py-2 hover:bg-stone-100 hover:text-terracotta-600">Week 1 · 오리엔테이션</a>
                         <a href="Dance_AI_image_learning_week4_0922.html" class="block px-4 py-2 hover:bg-stone-100 hover:text-terracotta-600">Week 4 · 이미지 학습</a>
                         <a href="Dance_AI_pose_eye_week5.html" class="block px-4 py-2 hover:bg-stone-100 hover:text-terracotta-600">Week 5 · 컴퓨터의 눈 — 관절</a>
                         <a href="Dance_AI_pose_learning_week5.html" class="block px-4 py-2 hover:bg-stone-100 hover:text-terracotta-600">Week 5 · 동작 학습</a>
@@ -116,14 +116,15 @@
 
     <!-- Header -->
     <header class="pt-40 pb-20 px-6 max-w-6xl mx-auto text-center">
-        <div class="inline-block px-4 py-1 rounded-full bg-stone-200 text-stone-600 text-sm font-bold mb-6 tracking-widest">ORIENTATION WEEK 01</div>
+        <div class="inline-block px-4 py-1 rounded-full bg-stone-200 text-stone-600 text-sm font-bold mb-6 tracking-widest">2026-2학기 · ORIENTATION WEEK 01</div>
         <h1 class="text-4xl md:text-7xl font-black mb-6 leading-tight text-stone-900">
             Dance & AI<br>
             <span class="text-terracotta-600 underline decoration-stone-200 underline-offset-8">오리엔테이션</span>
         </h1>
         <p class="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto">
-            AI로 나를 ‘무용덕후’로 증강시키기:<br>생성형 인간과 무용 지식 생산
+            AI로 나를 ‘무용덕후’로 증강시키기
         </p>
+        <p class="mt-8 text-stone-500 text-sm">Led by <strong class="text-stone-800">김서진</strong> · <a href="https://www.abclab.kr" target="_blank" rel="noopener" class="underline hover:text-terracotta-600">ABC Lab</a></p>
     </header>
 
     <!-- Course Overview -->
@@ -133,16 +134,23 @@
                 <h2 class="text-4xl font-black text-stone-900 leading-tight mb-4">교과목 개요</h2>
                 <div class="h-1 w-20 bg-terracotta-500"></div>
             </div>
-            <div class="w-full md:w-2/3 space-y-8 text-stone-700 leading-relaxed text-lg">
-                <p>
-                    본 강의는 현대 무용예술에 적용할 수 있는 기술의 접근법을 탐구하며 다양한 포맷의 테크놀로지를 이해하고 경험하는 강의입니다. 이를 통해 <span class="font-bold text-stone-900">기술을 도구 이상의 무용예술의 협업자로서 수용</span>합니다.
+            <div class="w-full md:w-2/3 space-y-10 text-stone-700 leading-relaxed text-lg">
+                <p class="text-2xl leading-relaxed">
+                    <span class="font-bold text-stone-900">기술을 도구 이상의 ‘무용예술의 협업자’로서 수용</span>하고, 자신만의 지식을 생산하는 프로젝트 기반의 강의입니다.
                 </p>
-                <p>
-                    인공지능(AI)과 무용 예술의 융합 가능성을 탐구하며, 인공지능을 기반으로 하는 리서치 및 실습 경험을 합니다. 이를 통해 학습자 스스로 설정한 연구, 창작, 교육개발의 주제를 중심으로 무용지식을 생산하는 프로젝트를 수행합니다.
-                </p>
-                <p>
-                    학습자들은 호기심을 가진 예술가의 정체성으로 새로운 매체와 환경과 관점을 바라보며 자신의 세계, 관점, 시야를 확장합니다. 워크숍, 토론, 팀플레이, 개인 프로젝트, 공유회 등의 형식을 통해 능동적이고 주체적이고 협력적인 태도로 참여합니다.
-                </p>
+                <div>
+                    <h3 class="text-sm font-bold tracking-widest text-terracotta-600 mb-4">핵심 교육 철학</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                            <h4 class="font-black text-lg mb-2 text-stone-900">예술가로서의 정체성</h4>
+                            <p class="text-stone-600 text-sm">호기심을 가진 예술가로서 새로운 매체와 환경을 바라보며 자신의 세계, 관점, 시야를 확장하는 주체적인 태도를 지향합니다.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                            <h4 class="font-black text-lg mb-2 text-stone-900">능동적인 협업 구조</h4>
+                            <p class="text-stone-600 text-sm">기술을 단순한 도구(Tool)로 보는 것을 넘어, 창작과 리서치의 동반자로 인식하며 능동적이고 협력적인 태도로 참여합니다.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -151,38 +159,30 @@
     <section id="objectives" class="py-24 px-6 bg-stone-100 reveal-section">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-black mb-6 text-stone-900">수업 목표</h2>
-                <p class="text-stone-600 max-w-2xl mx-auto">AI 시대의 무용 전문가로서 갖춰야 할 통합적인 역량을 시각화한 지표입니다.</p>
+                <h2 class="text-4xl font-black mb-6 text-stone-900">강의 5대 목표</h2>
             </div>
 
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <div class="w-full lg:w-1/2">
-                    <div class="chart-container bg-white p-8 rounded-3xl shadow-sm border border-stone-200">
-                        <canvas id="skillsChart"></canvas>
-                    </div>
-                </div>
-                <div class="w-full lg:w-1/2 space-y-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="bg-white p-6 rounded-2xl border border-stone-200">
-                        <h4 class="font-black text-lg mb-2 text-stone-900">융합적 태도와 지식 함양</h4>
+                        <h4 class="font-black text-lg mb-2 text-stone-900">융합적 태도 함양</h4>
                         <p class="text-stone-600 text-sm">예술과 기술의 융합에 관한 이해력과 포용력을 강화합니다.</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-stone-200">
-                        <h4 class="font-black text-lg mb-2 text-stone-900">자신의 무용 리터러시 증강</h4>
-                        <p class="text-stone-600 text-sm">AI를 통해 자신의 무용전문성을 높입니다.</p>
+                        <h4 class="font-black text-lg mb-2 text-stone-900">무용 리터러시 증강</h4>
+                        <p class="text-stone-600 text-sm">AI를 통해 자신만의 전문적인 무용 지식을 고도화합니다.</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-stone-200">
                         <h4 class="font-black text-lg mb-2 text-stone-900">프롬프트 연구 역량</h4>
-                        <p class="text-stone-600 text-sm">질문을 설계하고 정보를 검증하는 훈련을 합니다.</p>
+                        <p class="text-stone-600 text-sm">질문을 설계하고 정보를 비판적으로 검증하는 훈련을 합니다.</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-stone-200">
-                        <h4 class="font-black text-lg mb-2 text-stone-900">멀티모달 AI 활용 능력</h4>
-                        <p class="text-stone-600 text-sm">텍스트, 이미지, 영상 등 다양한 도구를 활용해 수준높은 산출물을 만듭니다.</p>
+                        <h4 class="font-black text-lg mb-2 text-stone-900">멀티모달 활용 능력</h4>
+                        <p class="text-stone-600 text-sm">텍스트, 이미지, 영상을 아우르는 수준 높은 산출물을 생산합니다.</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-stone-200">
-                        <h4 class="font-black text-lg mb-2 text-stone-900">AI 윤리의식</h4>
-                        <p class="text-stone-600 text-sm">저작권, 초상권, 사용윤리를 준수하고 AI 사용을 명시합니다.</p>
+                        <h4 class="font-black text-lg mb-2 text-stone-900">AI 윤리의식 준수</h4>
+                        <p class="text-stone-600 text-sm">저작권, 초상권 및 사용 윤리를 준수하고 이를 명확히 명시합니다.</p>
                     </div>
-                </div>
             </div>
         </div>
     </section>
@@ -190,108 +190,154 @@
     <!-- Identity Section -->
     <section id="identity" class="py-24 px-6 max-w-6xl mx-auto reveal-section">
         <div class="mb-16">
-            <h2 class="text-3xl font-black mb-4 text-stone-900">학습자의 정체성과 강화 역량</h2>
-            <p class="text-lg text-stone-600">본 강의를 통해 여러분이 도달하게 될 핵심 가치들입니다.</p>
+            <h2 class="text-3xl font-black mb-4 text-stone-900">학습자의 정체성과 강의 핵심 역량</h2>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12">
             <div class="space-y-6">
                 <div class="p-8 bg-terracotta-50 rounded-3xl border border-terracotta-100">
                     <h3 class="text-xl font-black text-terracotta-600 mb-4">호기심을 가진 예술가</h3>
-                    <p class="text-stone-700 leading-relaxed italic">
-                        "새로운 매체와 환경과 관점을 바라보며 자신의 세계, 관점, 시야를 확장합니다."
+                    <p class="text-stone-700 leading-relaxed">
+                        우리는 새로운 환경을 탐험하는 '예술가'입니다. 본 강의에서 수강생은 수동적인 학습자가 아닌, 자신의 세계를 확장해나가는 예술가의 정체성을 가집니다.
                     </p>
                 </div>
                 <div class="p-8 bg-stone-100 rounded-3xl border border-stone-200">
                     <h3 class="text-xl font-black text-stone-800 mb-4">참여 태도</h3>
-                    <p class="text-stone-700">능동적이고 주체적이며 협력적인 태도로 워크숍과 팀플레이에 참여합니다.</p>
+                    <p class="text-stone-700">워크숍, 토론, 팀플레이를 통해 주체적인 무용 지식을 생산하는 주인공이 됩니다.</p>
                 </div>
             </div>
-            
+
             <div class="bg-stone-900 p-10 rounded-3xl text-white shadow-2xl space-y-6">
-                <h3 class="text-2xl font-black text-terracotta-500">구체적 강화 역량</h3>
-                <ul class="space-y-4">
+                <h3 class="text-2xl font-black text-terracotta-500">강의 핵심 역량</h3>
+                <ul class="space-y-5">
                     <li class="flex gap-3">
                         <span class="text-terracotta-500 font-bold">01</span>
-                        <span>창의성과 문제해결 능력</span>
+                        <span><strong>창의적 문제해결</strong><br><span class="text-stone-400 text-sm">예술 환경 변화에 대한 유연한 적응력을 키웁니다.</span></span>
                     </li>
                     <li class="flex gap-3">
                         <span class="text-terracotta-500 font-bold">02</span>
-                        <span>예술 환경 변화에 대한 적응력</span>
+                        <span><strong>디지털 리터러시</strong><br><span class="text-stone-400 text-sm">매체에 대한 기술적 이해와 활용도를 극대화합니다.</span></span>
                     </li>
                     <li class="flex gap-3">
                         <span class="text-terracotta-500 font-bold">03</span>
-                        <span>디지털 리터러시</span>
+                        <span><strong>AI 활용 능력</strong><br><span class="text-stone-400 text-sm">무용 분야에 특화된 AI 활용 전문성을 확보합니다.</span></span>
                     </li>
                     <li class="flex gap-3">
                         <span class="text-terracotta-500 font-bold">04</span>
-                        <span>무용 분야 AI 활용 역량</span>
+                        <span><strong>지식 생산 프로젝트</strong><br><span class="text-stone-400 text-sm">연구, 창작, 교육 분야의 자기 주제 프로젝트를 수행합니다.</span></span>
                     </li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Roadmap Section -->
-    <section id="roadmap" class="py-24 px-6 max-w-4xl mx-auto reveal-section">
-        <h2 class="text-3xl font-black mb-12 text-stone-900 text-center">주차별 강의 계획</h2>
-        <div class="space-y-4">
-            <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
-                <button class="w-full text-left p-8 flex justify-between items-center bg-stone-50 hover:bg-stone-100 transition-colors" onclick="toggleTimeline('p1')">
-                    <h3 class="text-xl font-black">(Tech & Dance) 기계와 몸 (2~8주)</h3>
-                    <span id="icon-p1" class="text-stone-400 text-2xl">&#43;</span>
-                </button>
-                <div id="p1" class="timeline-content bg-white px-8">
-                    <div class="py-6 space-y-4 text-stone-600 text-sm leading-relaxed">
-                        <p>• 몸과 기술이 만나는 방법 (프로젝션, 모션캡쳐, 동작추정, 증강현실, 센서)</p>
-                        <p>• 몸감각 활용 툴을 사용한 프로젝트 실습 및 발표</p>
-                    </div>
+    <!-- Instructor Section -->
+    <section id="instructor" class="py-24 px-6 bg-stone-100 reveal-section">
+        <div class="max-w-6xl mx-auto space-y-12">
+            <h2 class="text-3xl font-black text-stone-900">강의자 소개</h2>
+
+            <div class="grid md:grid-cols-3 gap-10 items-start">
+                <div>
+                    <div class="text-xs font-bold tracking-widest text-terracotta-600 mb-2">강의 · 교육자료 제작</div>
+                    <div class="text-4xl font-black text-stone-900 mb-2">김서진</div>
+                    <ul class="space-y-1 text-stone-600 text-sm mt-6">
+                        <li>국민대학교 일반대학원 겸임교수</li>
+                        <li>ABC LAB 설립자, 대표이사</li>
+                        <li>대한무용학회 이사</li>
+                        <li class="text-stone-400">전 국민대학교 공연예술학부 / 소프트웨어융합대학원 겸임교수 (~2024.2)</li>
+                    </ul>
+                    <a href="https://www.abclab.kr" target="_blank" rel="noopener" class="inline-block mt-6 text-sm font-bold text-terracotta-600 underline">abclab.kr</a>
+                </div>
+                <div class="md:col-span-2 bg-white p-8 rounded-3xl border border-stone-200">
+                    <p class="text-stone-700 leading-relaxed mb-6">인공지능 시대에 역설적으로 더 중시되는 몸의 의미를 교육 안에서 탐구하고자 하며, 실천기반의 연구를 진행하고 있습니다.</p>
+                    <ul class="space-y-3 text-stone-600 text-sm">
+                        <li>2026 SSCI(Q1) 「Playfulness and Social-Emotional Support as Predictors of Elementary Students' AI Self-Efficacy」 공동저자</li>
+                        <li>2026 예술융합 AI 윤리 교육 프로그램 설계 공동발표</li>
+                        <li>〈몸기반 예술융합교육은 어떻게 만들어지는가?〉</li>
+                        <li>〈포스트 코로나를 대비하는 예술교육: 언택트 시대의 몸교육에 관한 소고〉</li>
+                        <li>〈A Case Study for Arts Based Convergence Education Using Artificial Intelligence〉</li>
+                        <li>〈초등학교 AI융합교육의 놀이학습 적용방안 탐색: 몸 놀이와 가족의 창의적 학습을 중심으로〉</li>
+                        <li>〈놀이로 배우는 인공지능〉 (단행본 공동집필)</li>
+                    </ul>
                 </div>
             </div>
-            <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
-                <button class="w-full text-left p-8 flex justify-between items-center bg-stone-50 hover:bg-stone-100 transition-colors" onclick="toggleTimeline('p2')">
-                    <h3 class="text-xl font-black">(AI & Dance) 증강되는 자기 주제 (9~15주)</h3>
-                    <span id="icon-p2" class="text-stone-400 text-2xl">&#43;</span>
-                </button>
-                <div id="p2" class="timeline-content bg-white px-8">
-                    <div class="py-6 space-y-4 text-stone-600 text-sm leading-relaxed">
-                        <p>• 프롬프트 설계와 좋은 질문 구조 만들기</p>
-                        <p>• 개별/그룹 코퍼스 구축 및 기말 렉처-퍼포먼스 발표</p>
-                    </div>
+
+            <div class="grid md:grid-cols-3 gap-10 items-start border-t border-stone-200 pt-12">
+                <div>
+                    <div class="text-xs font-bold tracking-widest text-terracotta-600 mb-2">공동 강의</div>
+                    <div class="text-4xl font-black text-stone-900 mb-2">김민규</div>
+                    <ul class="space-y-1 text-stone-600 text-sm mt-6">
+                        <li>국민대학교 조교수</li>
+                        <li class="text-stone-400">Department of Artificial Intelligence</li>
+                    </ul>
+                    <a href="https://mingyukim87.github.io/" target="_blank" rel="noopener" class="inline-block mt-6 text-sm font-bold text-terracotta-600 underline">mingyukim87.github.io</a>
+                </div>
+                <div class="md:col-span-2 bg-white p-8 rounded-3xl border border-stone-200">
+                    <p class="text-stone-700 leading-relaxed mb-2"><strong>연구 분야:</strong> 안전한 AI(Safe AI), 생성 모델, 확률적 머신러닝, 일반화, 퓨샷 학습, 메타러닝, 베이지안 모델, 변분 추론</p>
+                    <p class="text-stone-600 text-sm mb-6"><strong>학력:</strong> KAIST 인공지능 박사 · KAIST 해양시스템공학 석사 · 건국대학교 산업공학 학사</p>
+                    <ul class="space-y-3 text-stone-600 text-sm">
+                        <li>「Safety-Guided Flow (SGF): A Unified Framework for Negative Guidance in Safe Generation」 ICLR 2026, Oral</li>
+                        <li>「Training-Free Safe Denoisers For Safe Use of Diffusion Models」 NeurIPS 2025</li>
+                        <li>「Bayesian Principles Improve Prompt Learning In Vision-Language Models」 AISTATS 2025</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Workshop Section -->
-    <section id="workshop" class="py-24 px-6 bg-stone-900 text-stone-50 reveal-section">
-        <div class="max-w-6xl mx-auto">
-            <div class="mb-16 text-center max-w-3xl mx-auto">
-                <span class="text-terracotta-500 font-bold tracking-widest text-sm mb-2 block uppercase">Workshop 01</span>
-                <h2 class="text-4xl font-black mb-4">생성형 인간의 첫걸음</h2>
-                <p class="text-lg text-stone-400">나만의 무용 지식 지도를 만들기 위한 첫 번째 질문을 설계합니다.</p>
-            </div>
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-24 px-6 max-w-6xl mx-auto reveal-section">
+        <h2 class="text-3xl font-black mb-3 text-stone-900 text-center">15주간의 학습 여정</h2>
+        <p class="text-center text-stone-500 mb-12">2026-2학기 · 매주 화요일 · 9/1 ~ 12/8 · 총 15회</p>
 
-            <div class="flex flex-col md:flex-row gap-4 mb-12 justify-center">
-                <button onclick="showStep(1)" id="btn-step1" class="px-8 py-4 rounded-full bg-terracotta-600 text-white font-black">Step 1. 질문 던지기</button>
-                <button onclick="showStep(2)" id="btn-step2" class="px-8 py-4 rounded-full bg-stone-800 text-stone-400 font-black border border-stone-700">Step 2. 리서치</button>
-                <button onclick="showStep(3)" id="btn-step3" class="px-8 py-4 rounded-full bg-stone-800 text-stone-400 font-black border border-stone-700">Step 3. 결과 도출</button>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                <div class="text-terracotta-600 font-bold text-sm mb-1">1주차</div>
+                <h3 class="font-black text-lg mb-2">오리엔테이션</h3>
+                <p class="text-stone-600 text-sm">수요조사 · 학습 여정 설계</p>
             </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                <div class="text-terracotta-600 font-bold text-sm mb-1">2~8주차</div>
+                <h3 class="font-black text-lg mb-2">실습 중심</h3>
+                <p class="text-stone-600 text-sm">이론에 앞서 도구를 직접 다루며, 무엇이 되고 무엇이 안 되는지를 몸으로 확인합니다. (8주차 중간고사)</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                <div class="text-terracotta-600 font-bold text-sm mb-1">9~13주차</div>
+                <h3 class="font-black text-lg mb-2">실습의 해설</h3>
+                <p class="text-stone-600 text-sm">인공지능 전문가 김민규 교수님과 함께, 실습에서 겪은 가능성과 한계를 이론의 언어로 다시 풉니다.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-stone-200">
+                <div class="text-terracotta-600 font-bold text-sm mb-1">14~15주차</div>
+                <h3 class="font-black text-lg mb-2">종합 리뷰</h3>
+                <p class="text-stone-600 text-sm">자기 주제 선정 · 기말 발표</p>
+            </div>
+        </div>
 
-            <div class="bg-stone-800 p-10 rounded-3xl min-h-[250px] border border-stone-700 text-center">
-                <div id="step1" class="step-content active">
-                    <h3 class="text-2xl font-black mb-4 text-terracotta-400">"나는 무용의 어떤 부분에 미쳐있는가?"</h3>
-                    <p class="text-stone-300">장르, 역사, 동작 원리 등 자신의 열정을 한 문장의 질문으로 정리합니다.</p>
-                </div>
-                <div id="step2" class="step-content">
-                    <h3 class="text-2xl font-black mb-4 text-sage-400">AI를 통한 비판적 리서치</h3>
-                    <p class="text-stone-300">내 질문을 바탕으로 AI와 대화하며 낯선 키워드와 새로운 관점을 발견합니다.</p>
-                </div>
-                <div id="step3" class="step-content">
-                    <h3 class="text-2xl font-black mb-4 text-terracotta-400">지식 지도 혹은 자기소개서</h3>
-                    <p class="text-stone-300">리서치 내용을 바탕으로 증강된 자신만의 무용 지식을 문서화합니다.</p>
-                </div>
-            </div>
+        <h3 class="text-xl font-black mb-2 text-stone-900">주차별 계획</h3>
+        <p class="text-stone-500 text-sm mb-4">9/1 기준 · 변경 가능</p>
+        <div class="overflow-x-auto bg-white border border-stone-200 rounded-2xl">
+            <table class="w-full text-sm text-left min-w-[640px]">
+                <thead class="bg-stone-100 text-stone-600">
+                    <tr><th class="p-3 w-12">주차</th><th class="p-3 w-16">날짜</th><th class="p-3">주제</th><th class="p-3">내용</th><th class="p-3 w-16">담당</th><th class="p-3 w-24">비고</th></tr>
+                </thead>
+                <tbody class="divide-y divide-stone-100 text-stone-700">
+                    <tr><td class="p-3">1</td><td class="p-3">9/1</td><td class="p-3 font-bold">오리엔테이션</td><td class="p-3">수업소개, 수요조사, 강의자 소개 (결과에 따라 이후 계획 재조정 가능)</td><td class="p-3">김서진</td><td class="p-3">12:00</td></tr>
+                    <tr><td class="p-3">2</td><td class="p-3">9/8</td><td class="p-3 font-bold">인공지능과 몸</td><td class="p-3">기계와 몸 → 인공지능과 몸. 기술과 몸(예술)의 관계 중심, ABC Lab 사례</td><td class="p-3">김서진</td><td class="p-3">12:00</td></tr>
+                    <tr><td class="p-3">3</td><td class="p-3">9/15</td><td class="p-3 font-bold">인공지능 원론 (이론)</td><td class="p-3">인공지능 원론, 기술 트렌드와 현황</td><td class="p-3">김민규</td><td class="p-3">10:30</td></tr>
+                    <tr><td class="p-3">4</td><td class="p-3">9/22</td><td class="p-3 font-bold">실습: 대화형 AI 활용 I</td><td class="p-3">GPT·Gemini·Claude·Suno 활용 (채팅과 멀티모달)</td><td class="p-3">김서진</td><td class="p-3">12:00/13:30</td></tr>
+                    <tr><td class="p-3">5</td><td class="p-3">9/29</td><td class="p-3 font-bold">실습: 대화형 AI 활용 II</td><td class="p-3">GPT·Gemini·Claude·Suno 활용 (채팅과 멀티모달)</td><td class="p-3">김서진</td><td class="p-3">12:00/13:30</td></tr>
+                    <tr><td class="p-3">6</td><td class="p-3">10/6</td><td class="p-3 font-bold">실습: 프롬프트 댄스</td><td class="p-3">대화형 AI와 동작 구성 : 되는 것과 안 되는 것 알기. 〈프롬프트 댄스〉 사례</td><td class="p-3">김서진</td><td class="p-3">12:00/13:30</td></tr>
+                    <tr><td class="p-3">7</td><td class="p-3">10/13</td><td class="p-3 font-bold">실습: 인터랙티브 코딩</td><td class="p-3">p5.js + ml5.js 인터랙티브 작업, 바이브코딩(MediaPipe, TensorFlow.js)</td><td class="p-3">김서진</td><td class="p-3">12:00/13:30</td></tr>
+                    <tr><td class="p-3">8</td><td class="p-3">10/20</td><td class="p-3 font-bold">중간고사</td><td class="p-3">자기 주제 씨앗 찾기</td><td class="p-3">—</td><td class="p-3">휴강·과제</td></tr>
+                    <tr><td class="p-3">9</td><td class="p-3">10/27</td><td class="p-3 font-bold">이론: 실습의 원리</td><td class="p-3">실습들에 대한 이론적 설명</td><td class="p-3">김민규</td><td class="p-3">10:30</td></tr>
+                    <tr><td class="p-3">10</td><td class="p-3">11/3</td><td class="p-3 font-bold">실습: 이미지학습·포즈학습</td><td class="p-3">이미지학습·포즈학습 판별하기, 모션캡처 시연</td><td class="p-3">김서진</td><td class="p-3">12:00/13:30</td></tr>
+                    <tr><td class="p-3">11</td><td class="p-3">11/10</td><td class="p-3 font-bold">이론: LLM과 디퓨전</td><td class="p-3">대형언어모델과 디퓨전 (멀티모달)</td><td class="p-3">김민규</td><td class="p-3">10:30</td></tr>
+                    <tr><td class="p-3">12</td><td class="p-3">11/17</td><td class="p-3 font-bold">이론: 프롬프트 댄스 분석</td><td class="p-3">왜 작동했고 왜 안 됐나 (동작·감각에 대한 AI의 가능성과 한계, 피지컬 AI)</td><td class="p-3">김민규</td><td class="p-3">10:30</td></tr>
+                    <tr><td class="p-3">13</td><td class="p-3">11/24</td><td class="p-3 font-bold">이론: 데이터·편향·윤리</td><td class="p-3">기계학습과 데이터, 편향과 윤리</td><td class="p-3">김민규</td><td class="p-3">10:30</td></tr>
+                    <tr><td class="p-3">14</td><td class="p-3">12/1</td><td class="p-3 font-bold">종합 리뷰</td><td class="p-3">종합 리뷰, 기말고사 안내 (자기 주제 선정과 발표 준비)</td><td class="p-3">김서진</td><td class="p-3">12:00</td></tr>
+                    <tr><td class="p-3">15</td><td class="p-3">12/8</td><td class="p-3 font-bold">기말 발표</td><td class="p-3">기말고사 발표, 수업 회고</td><td class="p-3">김서진</td><td class="p-3">기말고사(발표)</td></tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
@@ -301,46 +347,52 @@
             <div class="mb-12">
                 <h2 class="text-5xl font-black text-stone-900 mb-6">강의 수요조사</h2>
                 <p class="text-xl text-stone-600 leading-relaxed max-w-2xl mx-auto">
-                    본 강의에 대한 학습자님의 기대와 목표를 파악하여 더 나은 수업을 만들고자 합니다. 아래 버튼을 눌러 설문에 참여해 주세요.
+                    여러분의 기대와 목표를 파악하여 더욱 효과적인 수업을 구성하고자 합니다.
                 </p>
             </div>
-            
+
             <div class="flex justify-center">
-                <a href="https://forms.gle/zmHji6rsyDvmagru5" target="_blank" class="group relative inline-flex items-center justify-center px-12 py-8 font-black text-white transition-all bg-terracotta-600 rounded-3xl hover:bg-terracotta-500 hover:shadow-2xl shadow-xl transform hover:-translate-y-2 active:scale-95">
+                <a href="https://forms.gle/gf2N9KWzzwKQTg5T9" target="_blank" class="group relative inline-flex items-center justify-center px-12 py-8 font-black text-white transition-all bg-terracotta-600 rounded-3xl hover:bg-terracotta-500 hover:shadow-2xl shadow-xl transform hover:-translate-y-2 active:scale-95">
                     <span class="text-2xl mr-4">📝</span>
                     <span class="text-2xl">설문지 작성하기 (새 창)</span>
                     <span class="ml-4 text-xl group-hover:translate-x-2 transition-transform">&#8594;</span>
                 </a>
             </div>
-            
-            <p class="mt-12 text-stone-400 text-sm italic">
-                * 설문 응답은 익명으로 처리되며 수업 구성의 기초 자료로만 활용됩니다.
-            </p>
         </div>
     </section>
 
     <!-- Footer & Logistics -->
     <footer class="py-24 px-6 bg-stone-200 reveal-section">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl font-black mb-12 text-stone-900">준비물 및 다음 주 안내</h2>
-            
+            <h2 class="text-3xl font-black mb-12 text-stone-900">수업 준비 및 2주차 안내</h2>
+
             <div class="grid md:grid-cols-2 gap-8 mb-16 text-left">
                 <div class="bg-white p-8 rounded-3xl shadow-sm">
-                    <h3 class="font-black text-xl mb-6 text-stone-900">💻 필수 준비물</h3>
+                    <h3 class="font-black text-xl mb-6 text-stone-900">💻 수업 준비 및 유의사항</h3>
                     <ul class="space-y-4 text-stone-600 text-sm">
-                        <li><strong>개인 노트북:</strong> 실습 시 지참을 권장합니다. (매 수업 필수는 아니나, 실습 주차에는 필수입니다.)</li>
-                        <li><strong>도구 계정:</strong> Google 도구 및 AI 툴 계정 미리 준비.</li>
+                        <li><strong>개인 노트북 지참 필수:</strong> 매 수업 구글 도구 사용을 기본으로 하므로 반드시 노트북을 준비해 주세요.</li>
+                        <li><strong>도구 활용 역량:</strong> 구글 도구 및 주요 AI 툴(ChatGPT, Claude 등) 계정이 필요합니다.</li>
+                        <li><strong>능동적 참여:</strong> 프로젝트 기반 수업으로 팀플레이와 토론에 대한 적극적인 태도가 중요합니다.</li>
+                        <li><strong>일정 확인:</strong> 실습과 이론수업에 따라, 분반 상황에 따라 개별 시작시간이 다릅니다.</li>
                     </ul>
                 </div>
                 <div class="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-sage-600">
-                    <h3 class="font-black text-xl mb-6 text-stone-900">📅 다음 주 예고</h3>
-                    <p class="text-stone-600 leading-relaxed">
-                        다음 주는 <strong>(Tech & Dance) 기계와 몸</strong>을 주제로 진행됩니다. 수업 시작 시간 <strong>오전 10시</strong>를 엄수해 주세요.
-                    </p>
+                    <h3 class="font-black text-xl mb-6 text-stone-900">📅 2주차 강의 안내</h3>
+                    <ul class="space-y-3 text-stone-600 text-sm">
+                        <li>• Dance & AI 강의계획(확정) 안내</li>
+                        <li>• 설문 답변 기반 자기소개 (관심사, 연구주제, 작업 등 구체적 소개)</li>
+                        <li>• 기계와 몸: 강의, 토론</li>
+                    </ul>
+                    <p class="mt-4 text-stone-600 text-sm"><strong>수업 시간:</strong> 12:00 ~ 14:00</p>
                 </div>
             </div>
-            
-            <p class="text-stone-400 text-xs tracking-widest uppercase">Dance & AI Orientation // 2024</p>
+
+            <div class="text-stone-500 text-xs leading-relaxed space-y-1">
+                <p><strong class="text-stone-700">강의 · 교육자료 제작: 김서진</strong> (<a href="https://www.abclab.kr" target="_blank" rel="noopener" class="underline">ABC Lab</a>)</p>
+                <p>본 페이지와 실습 자료의 무단 복제 및 배포를 금합니다.</p>
+                <p class="text-stone-400">讲课 · 教材制作:김서진 · 禁止擅自复制及传播本页面和实习资料。</p>
+                <p class="text-stone-400 pt-2 tracking-widest">© 2026 김서진 · Dance & AI · 2026-2학기</p>
+            </div>
         </div>
     </footer>
 
@@ -353,31 +405,6 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal-section').forEach(s => observer.observe(s));
-
-        // Radar Chart
-        document.addEventListener('DOMContentLoaded', () => {
-            const ctx = document.getElementById('skillsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['융합적 태도', '무용 리터러시', '프롬프트 연구', '멀티모달 활용', 'AI 윤리의식'],
-                    datasets: [{
-                        data: [95, 90, 85, 80, 100],
-                        backgroundColor: 'rgba(210, 96, 66, 0.2)',
-                        borderColor: 'rgba(210, 96, 66, 1)',
-                        pointBackgroundColor: 'rgba(129, 178, 154, 1)',
-                        pointBorderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { r: { ticks: { display: false }, min: 0, max: 100 } },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        });
 
         // Workshop dropdown (GNB)
         (function () {
@@ -398,26 +425,6 @@
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
         })();
 
-        // UI Helpers
-        function toggleTimeline(id) {
-            const content = document.getElementById(id);
-            const icon = document.getElementById('icon-' + id);
-            content.classList.toggle('expanded');
-            icon.innerHTML = content.classList.contains('expanded') ? '&#8722;' : '&#43;';
-        }
-
-        function showStep(step) {
-            for(let i=1; i<=3; i++) {
-                document.getElementById('step' + i).classList.remove('active');
-                let btn = document.getElementById('btn-step' + i);
-                btn.classList.replace('bg-terracotta-600', 'bg-stone-800');
-                btn.classList.replace('text-white', 'text-stone-400');
-            }
-            document.getElementById('step' + step).classList.add('active');
-            let activeBtn = document.getElementById('btn-step' + step);
-            activeBtn.classList.replace('bg-stone-800', 'bg-terracotta-600');
-            activeBtn.classList.replace('text-stone-400', 'text-white');
-        }
     </script>
 </body>
 </html>
