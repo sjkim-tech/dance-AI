@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기말고사 안내 — Dance &amp; AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--paper:#FBFAF7;--ink:#1B2A41;--ink-2:#4A5568;--ink-3:#8A94A6;--line:#DDD8CF;--well:#F1EEE7;--coral:#E8674B;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Gowun Dodum','Malgun Gothic',sans-serif}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+a:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.zh{display:block;font-size:.8em;color:var(--ink-3)}
+.wrap{max-width:900px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+header h1{font-size:26px;font-weight:400;line-height:1.25}
+header h1 .zh{font-size:14px;margin-top:2px}
+.course{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right;line-height:1.7}
+
+.lead{background:#fff;border:1.5px solid var(--ink);border-radius:6px;padding:18px 20px;font-size:17px;margin-bottom:26px}
+.lead .zh{margin-top:8px;font-size:13.5px}
+h2{font-size:19px;font-weight:400;color:var(--coral);margin:30px 0 12px}
+h2 .zh{display:inline;margin-left:8px;font-size:13px;color:var(--coral);opacity:.8}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-bottom:10px;display:grid;grid-template-columns:34px 1fr;gap:10px}
+.card .n{font-family:var(--mono);font-size:13px;color:#fff;background:var(--coral);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.card b{font-weight:400;font-size:17px}
+.card p{color:var(--ink-2);font-size:15px}
+.card .zh{font-size:13px;margin-top:3px}
+
+.rows{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.row{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:14px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:none}
+.row .k{color:var(--coral)}
+.row .k .zh{color:var(--coral);opacity:.8}
+.row .v{font-size:18px}
+.row .v .zh{font-size:13px}
+.row .v a{color:var(--ink)}
+@media(max-width:560px){.row{grid-template-columns:1fr;gap:2px}}
+.big{background:var(--well);border-radius:8px;text-align:center;padding:22px 16px;margin:12px 0}
+.big b{display:block;font-weight:400;font-size:30px;color:var(--coral);line-height:1.3}
+.big span{font-size:14px;color:var(--ink-2)}
+
+ol.q{list-style:none;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+ol.q li{display:grid;grid-template-columns:34px 1fr;gap:10px;padding:13px 18px;border-top:1px solid var(--line);font-size:17px}
+ol.q li:first-child{border-top:none}
+ol.q .n{font-family:var(--mono);color:var(--coral);font-size:15px;margin-top:2px}
+ol.q .zh{font-size:13px}
+.more{margin-top:26px;font-size:14px;color:var(--ink-2)}
+.more a{color:var(--coral)}
+</style>
+</head>
+<body>
+<script src="gnb.js"></script>
+<div class="wrap">
+
+<header>
+  <h1>기말고사 안내<span class="zh">期末考试说明</span></h1>
+  <div class="course">Dance &amp; AI · 2026년 2학기</div>
+</header>
+
+<div class="lead">
+  <b style="font-weight:400;color:var(--coral)">기말고사: 개인 프로젝트 · 期末考试:个人项目</b><br>
+  1~14주차에 다룬 인공지능 개념·도구·기술을 써서 개인 프로젝트를 만듭니다. 주제는 무용 연구·공연·교육·경영 등 자기 분야에서 정합니다. 수업에서 다루지 않은 AI 도구도 쓸 수 있습니다.
+  <span class="zh">运用第1~14周学过的人工智能概念、工具和技术,完成个人项目。主题在舞蹈研究、演出、教育、经营等自己的领域中确定。也可以使用课堂上没有讲过的AI工具。</span>
+</div>
+
+<h2>제출물 (두 가지 모두)<span class="zh">提交内容(两项都要提交)</span></h2>
+<div class="card"><span class="n">1</span><div><b>발표 자료 (PPT 또는 PDF)</b><p>프로젝트 과정, 사용한 프롬프트(캡처 또는 텍스트), AI가 만든 부분과 내가 판단하고 고친 부분<span class="zh">发表资料(PPT或PDF):项目过程、使用的提示词(截图或文字)、AI制作的部分和我自己判断并修改的部分</span></p></div></div>
+<div class="card"><span class="n">2</span><div><b>결과물</b><p>영상·이미지·음성·웹페이지 등 형식 자유. 용량이 크면 링크로 제출<span class="zh">成果物:视频、图片、音频、网页等,形式自由。文件太大时用链接提交</span></p></div></div>
+
+<h2>제출과 발표<span class="zh">提交与发表</span></h2>
+<div class="rows">
+  <div class="row"><div class="k">제출<span class="zh">提交</span></div><div class="v">12월 6일(일) 23:59까지 eCampus에 업로드<span class="zh">12月6日(周日)23:59前上传到eCampus</span></div></div>
+  <div class="row"><div class="k">발표<span class="zh">发表</span></div><div class="v">12월 8일(화) 12:00~15:00 · 두 반 함께 · 전원 참석<span class="zh">12月8日(周二)12:00~15:00 · 两个班一起 · 全体参加</span></div></div>
+</div>
+<div class="big"><b>발표는 1인 3분 이내 · 每人3分钟以内</b><span>시간을 꼭 지켜 주세요. · 请一定遵守时间。</span></div>
+<div class="rows">
+  <div class="row"><div class="k">질문<span class="zh">提问</span></div><div class="v"><a href="mailto:seojin@kookmin.ac.kr">seojin@kookmin.ac.kr</a><span class="zh">有问题请发邮件</span></div></div>
+</div>
+
+<h2>평가: 다섯 가지 질문<span class="zh">评价:五个问题</span></h2>
+<ol class="q">
+  <li><span class="n">1</span><div>수업에서 얻은 지식과 인사이트를 자기 것으로 만들었는가?<span class="zh">是否把课堂上学到的知识和见解变成了自己的东西?</span></div></li>
+  <li><span class="n">2</span><div>주제가 자기 분야와 연결되어 있는가?<span class="zh">主题是否与自己的领域相联系?</span></div></li>
+  <li><span class="n">3</span><div>AI를 활용한 과정을 기록했는가?<span class="zh">是否记录了使用AI的过程?</span></div></li>
+  <li><span class="n">4</span><div>결과물을 완성했는가?<span class="zh">是否完成了成果物?</span></div></li>
+  <li><span class="n">5</span><div>3분 내에 효과적으로 발표했는가?<span class="zh">是否在3分钟内有效地发表?</span></div></li>
+</ol>
+
+<p class="more">예시 프로젝트와 프롬프트는 <a href="Dance_AI_vibe_week13.html">13주차 · 바이브코딩 예시</a>에서 볼 수 있습니다.<span class="zh">示例项目和提示词可以在 第13周 · Vibe Coding 示例 中查看。</span></p>
+</div>
+</body>
+</html>
