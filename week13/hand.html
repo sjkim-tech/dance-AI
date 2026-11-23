@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실 — stretch to snap</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#111;color:#fff;font-family:'Noto Serif KR',serif;overflow:hidden}
+video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#title{position:fixed;left:24px;top:20px;font-size:18px;z-index:2;text-shadow:0 1px 8px #000}
+#top{position:fixed;right:24px;top:18px;z-index:4;display:flex;gap:10px;align-items:center}
+#top a{font:12px 'IBM Plex Mono',monospace;color:#fff;text-decoration:none;text-shadow:0 1px 6px #000}
+#reset{font:12px 'IBM Plex Mono',monospace;color:#fff;background:rgba(0,0,0,.5);border:1px solid #fff;border-radius:999px;padding:6px 16px;cursor:pointer}
+#count{position:fixed;left:0;right:0;bottom:22px;text-align:center;font:14px 'IBM Plex Mono',monospace;z-index:2;text-shadow:0 1px 8px #000}
+#start{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#14110d;text-align:center;padding:24px}
+#start h1{font-size:40px;font-weight:600}
+#start p{color:#cbbfa8;font-size:15px;line-height:1.8;max-width:520px}
+#start button{font:inherit;font-size:16px;color:#14110d;background:#ffb3d1;border:none;border-radius:999px;padding:12px 32px;cursor:pointer}
+#msg{font:12px 'IBM Plex Mono',monospace;color:#ffb3d1;min-height:18px}
+</style>
+</head>
+<body>
+<video id="v" playsinline muted></video>
+<canvas id="c"></canvas>
+<div id="title">실 — stretch to snap</div>
+<div id="top"><button id="reset">RESET</button><a href="../Dance_AI_vibe_week13.html">← 13주차</a></div>
+<div id="count"></div>
+<div id="start">
+  <h1>실</h1>
+  <p>두 손을 함께 보이면 손가락 끝 사이에 실 다섯 개가 이어집니다. 처음 길이의 2.4배 넘게 당기면 끊어집니다.<br>两只手同时出现时,指尖之间会连上五条线。拉到最初长度的 2.4 倍以上就会断。</p>
+  <button id="go">카메라 켜기 · 打开摄像头</button>
+  <div id="msg"></div>
+</div>
+<script type="module">
+import {FilesetResolver, HandLandmarker} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const WASM="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+const MODEL="https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task";
+const video=document.getElementById('v'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const msg=document.getElementById('msg'),count=document.getElementById('count');
+const COLORS=['#ff7eb6','#ffa24c','#7ef0c4','#5fd4ff','#c9a7ff'];   // 핑크/오렌지/민트/시안/라일락
+const TIPS=[4,8,12,16,20];
+const SNAP=2.4;
+let W,H,hands=null,lastTS=0,lastVT=-1,res=null;
+let threads=null,particles=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+addEventListener('resize',resize);resize();
+function P(l){
+  const vw=video.videoWidth||1280,vh=video.videoHeight||720,s=Math.max(W/vw,H/vh);
+  const dw=vw*s,dh=vh*s,ox=(W-dw)/2,oy=(H-dh)/2;
+  return {x:W-(ox+l.x*dw),y:oy+l.y*dh};
+}
+document.getElementById('reset').onclick=()=>{threads=null;particles=[];};
+document.getElementById('go').onclick=async()=>{
+  try{
+    msg.textContent='카메라 켜는 중…';
+    const s=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720,facingMode:'user'},audio:false});
+    video.srcObject=s;await video.play();
+    msg.textContent='손 모델 불러오는 중…';
+    const fs=await FilesetResolver.forVisionTasks(WASM);
+    hands=await HandLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'GPU'},runningMode:'VIDEO',numHands:2});
+    document.getElementById('start').style.display='none';
+    requestAnimationFrame(loop);
+  }catch(e){msg.textContent='오류: '+e.message;}
+};
+function burst(x,y,c){for(let i=0;i<60;i++){const a=Math.random()*Math.PI*2,v=2+Math.random()*9;particles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,c});}}
+
+function loop(){
+  requestAnimationFrame(loop);
+  if(video.readyState>=2&&video.currentTime!==lastVT){
+    lastVT=video.currentTime;
+    const ts=Math.max(performance.now(),lastTS+1);lastTS=ts;
+    res=hands.detectForVideo(video,ts);
+  }
+  // 어두운 색으로 덮지 않고 destination-out으로 지워서 웹캠이 보이게
+  ctx.globalCompositeOperation='destination-out';
+  ctx.fillStyle='rgba(0,0,0,0.22)';ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+
+  let hs=(res&&res.landmarks)?res.landmarks.map(h=>h.map(P)):[];
+  if(hs.length===2&&hs[0][0].x>hs[1][0].x)hs=[hs[1],hs[0]];   // 화면 왼쪽 손을 먼저
+
+  // 관절 점 (양손 42개)
+  hs.forEach(h=>h.forEach((p,i)=>{
+    ctx.shadowBlur=14;ctx.shadowColor=ctx.fillStyle=COLORS[i%5];
+    ctx.beginPath();ctx.arc(p.x,p.y,TIPS.includes(i)?6:3.5,0,Math.PI*2);ctx.fill();
+  }));
+
+  if(hs.length===2){
+    if(!threads){   // 양손이 처음 함께 보일 때 실 5개를 잇고 첫 길이를 기억
+      threads=TIPS.map((t,i)=>({tip:t,c:COLORS[i],rest:Math.max(40,Math.hypot(hs[0][t].x-hs[1][t].x,hs[0][t].y-hs[1][t].y)),alive:true}));
+    }
+    for(const th of threads){
+      if(!th.alive)continue;
+      const a=hs[0][th.tip],b=hs[1][th.tip],d=Math.hypot(a.x-b.x,a.y-b.y),k=d/th.rest;
+      if(k>=SNAP){th.alive=false;burst((a.x+b.x)/2,(a.y+b.y)/2,th.c);continue;}
+      const tension=Math.max(0,Math.min(1,(k-1)/(SNAP-1)));
+      const sag=k<1?(th.rest-d)*0.45:0;                       // 느슨하면 아래로 처짐
+      const shake=tension>0.7?(Math.random()-.5)*14*tension:0; // 끊어지기 전 떨림
+      ctx.strokeStyle=th.c;ctx.shadowColor=th.c;ctx.shadowBlur=18+tension*20;
+      ctx.lineWidth=5-tension*3.4;
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2+shake,(a.y+b.y)/2+sag+shake,b.x,b.y);ctx.stroke();
+    }
+  }
+  for(const p of particles){
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.vx*=0.98;p.life-=0.016;
+    ctx.shadowBlur=10;ctx.shadowColor=p.c;ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.c;
+    ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;ctx.shadowBlur=0;
+  particles=particles.filter(p=>p.life>0);
+
+  if(!threads)count.textContent='두 손을 함께 보여 주세요 · 请同时露出两只手';
+  else{const n=threads.filter(t=>t.alive).length;count.textContent=n?`남은 실 ${n} / 5`:'모두 끊어졌습니다 — RESET';}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>공명</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#14110d;color:#efe6d6;font-family:'Noto Serif KR',serif;overflow:hidden}
+video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:.35}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#title{position:fixed;left:24px;top:20px;font-size:18px;letter-spacing:.08em;z-index:2}
+#back{position:fixed;right:24px;top:20px;font:12px 'IBM Plex Mono',monospace;color:#b9a888;text-decoration:none;z-index:4}
+#hud{position:fixed;left:24px;bottom:20px;font:11px 'IBM Plex Mono',monospace;color:#d9c9a8;line-height:1.8;z-index:2}
+#panel{position:fixed;right:24px;bottom:20px;z-index:2;background:rgba(20,17,13,.7);border:1px solid #5a4d38;border-radius:10px;padding:12px 14px;font:11px 'IBM Plex Mono',monospace;color:#d9c9a8;display:grid;gap:8px}
+#panel label{display:grid;grid-template-columns:120px 130px;align-items:center;gap:8px}
+#panel input{accent-color:#d9a441}
+#start{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#14110d;text-align:center;padding:24px}
+#start h1{font-size:40px;font-weight:600}
+#start p{color:#b9a888;font-size:15px;line-height:1.8;max-width:560px}
+#start button{font:inherit;font-size:16px;color:#14110d;background:#d9a441;border:none;border-radius:999px;padding:12px 32px;cursor:pointer}
+#msg{font:12px 'IBM Plex Mono',monospace;color:#d9a441;min-height:18px}
+</style>
+</head>
+<body>
+<video id="v" playsinline muted></video>
+<canvas id="c"></canvas>
+<div id="title">공명</div>
+<a id="back" href="../Dance_AI_vibe_week13.html">← 13주차</a>
+<div id="hud"></div>
+<div id="panel">
+  <label>영상 투명도 · 画面<input id="sVideo" type="range" min="0" max="1" step="0.01" value="0.35"></label>
+  <label>소리 볼륨 · 音量<input id="sVol" type="range" min="0" max="1" step="0.01" value="0.6"></label>
+  <label>잔상 길이 · 残影<input id="sTrail" type="range" min="0" max="1" step="0.01" value="0.7"></label>
+</div>
+<div id="start">
+  <h1>공명</h1>
+  <p>오른손이 올라가면 고음, 왼손이 올라가면 저음. 몸을 펼치면 음색이 밝아지고, 빠른 움직임은 짧은 타악이 됩니다. 소리가 납니다.<br>右手抬高是高音,左手抬高是低音。身体展开音色变亮,快速的动作变成短促的打击声。会发出声音。</p>
+  <button id="go">카메라와 소리 켜기 · 打开摄像头和声音</button>
+  <div id="msg"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script type="module">
+import {FilesetResolver, PoseLandmarker} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const WASM="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+const MODEL="https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task";
+const video=document.getElementById('v'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const msg=document.getElementById('msg'),hud=document.getElementById('hud');
+const sVideo=document.getElementById('sVideo'),sVol=document.getElementById('sVol'),sTrail=document.getElementById('sTrail');
+const WHITE='239,230,214',OCHER='217,164,65';
+// 추적할 네 곳: 왼손목 15, 오른손목 16, 왼발목 27, 오른발목 28
+const LIMBS=[{i:15,c:WHITE,note:'C2'},{i:16,c:WHITE,note:'G2'},{i:27,c:OCHER,note:'C1'},{i:28,c:OCHER,note:'E1'}];
+const HI=[69,72,74,76,79,81,84,86,88,91,93];   // 가단조 5음 음계, 높은 쪽
+const LO=[33,36,38,40,43,45,48,50,52,55,57];   // 낮은 쪽
+let W,H,pose=null,lastTS=0,lastVT=-1,res=null,prev={},particles=[],lastHit=0;
+let master,filt,hi,lo,gHi,gLo,perc;
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+addEventListener('resize',resize);resize();
+function P(l){
+  const vw=video.videoWidth||1280,vh=video.videoHeight||720,s=Math.max(W/vw,H/vh);
+  const dw=vw*s,dh=vh*s,ox=(W-dw)/2,oy=(H-dh)/2;
+  return {x:W-(ox+l.x*dw),y:oy+l.y*dh};
+}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+sVideo.oninput=()=>video.style.opacity=sVideo.value;
+sVol.oninput=()=>{if(master)master.gain.rampTo(+sVol.value,0.05);};
+
+document.getElementById('go').onclick=async()=>{
+  try{
+    await Tone.start();   // 소리는 사용자 클릭 이후에 시작
+    master=new Tone.Gain(+sVol.value).toDestination();
+    const rev=new Tone.Reverb({decay:3,wet:0.35}).connect(master);
+    filt=new Tone.Filter(800,'lowpass').connect(rev);
+    gHi=new Tone.Gain(0).connect(filt);gLo=new Tone.Gain(0).connect(filt);
+    hi=new Tone.Oscillator(440,'triangle').connect(gHi).start();
+    lo=new Tone.Oscillator(110,'sawtooth').connect(gLo).start();
+    perc=new Tone.MembraneSynth({pitchDecay:0.02,octaves:4,envelope:{attack:0.001,decay:0.25,sustain:0,release:0.1}}).connect(master);
+    msg.textContent='카메라 켜는 중…';
+    const s=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720,facingMode:'user'},audio:false});
+    video.srcObject=s;await video.play();
+    msg.textContent='포즈 모델 불러오는 중…';
+    const fs=await FilesetResolver.forVisionTasks(WASM);
+    pose=await PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'GPU'},runningMode:'VIDEO',numPoses:1});
+    document.getElementById('start').style.display='none';
+    requestAnimationFrame(loop);
+  }catch(e){msg.textContent='오류: '+e.message;}
+};
+
+function loop(){
+  requestAnimationFrame(loop);
+  if(video.readyState>=2&&video.currentTime!==lastVT){
+    lastVT=video.currentTime;
+    const ts=Math.max(performance.now(),lastTS+1);lastTS=ts;
+    res=pose.detectForVideo(video,ts);
+  }
+  // 잔상: destination-out으로 조금씩 지움 (어두운 색으로 덮지 않음)
+  ctx.globalCompositeOperation='destination-out';
+  ctx.fillStyle=`rgba(0,0,0,${0.22-0.2*sTrail.value})`;ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+
+  const lm=res&&res.landmarks&&res.landmarks[0];
+  if(lm){
+    const now=performance.now();
+    for(const L of LIMBS){
+      const l=lm[L.i];if((l.visibility??1)<0.5){prev[L.i]=null;continue;}
+      const p=P(l),q=prev[L.i];
+      if(q){
+        const sp=Math.hypot(p.x-q.x,p.y-q.y);
+        ctx.strokeStyle=`rgba(${L.c},0.9)`;ctx.lineWidth=clamp(2+sp*0.25,2,14);ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(q.x,q.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+        const n=Math.min(6,Math.floor(sp/8));
+        for(let k=0;k<n;k++)particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*4+(p.x-q.x)*0.1,vy:(Math.random()-.5)*4+(p.y-q.y)*0.1,life:1,c:L.c});
+        // 빠른 움직임 → 짧은 타악
+        if(sp>Math.min(W,H)*0.06&&now-lastHit>160){lastHit=now;perc.triggerAttackRelease(L.note,'16n');}
+      }
+      prev[L.i]=p;
+    }
+    // 오른손 높이 → 고음, 왼손 높이 → 저음
+    const rh=lm[16],lh=lm[15];
+    const hR=clamp(1-rh.y,0,1),hL=clamp(1-lh.y,0,1);
+    const okR=(rh.visibility??1)>0.5,okL=(lh.visibility??1)>0.5;
+    hi.frequency.rampTo(Tone.Frequency(HI[Math.round(hR*(HI.length-1))],'midi').toFrequency(),0.08);
+    lo.frequency.rampTo(Tone.Frequency(LO[Math.round(hL*(LO.length-1))],'midi').toFrequency(),0.08);
+    gHi.gain.rampTo(okR?0.22:0,0.15);gLo.gain.rampTo(okL?0.2:0,0.15);
+    // 몸이 펼쳐지면 음색이 밝아짐 (양손목 거리 ÷ 어깨 너비)
+    const sh=Math.hypot(lm[11].x-lm[12].x,lm[11].y-lm[12].y)||0.1;
+    const spread=clamp(Math.hypot(rh.x-lh.x,rh.y-lh.y)/sh/4,0,1);
+    filt.frequency.rampTo(300*Math.pow(20,spread),0.1);
+    hud.innerHTML=`오른손 높이 ${hR.toFixed(2)}<br>왼손 높이&nbsp;&nbsp; ${hL.toFixed(2)}<br>펼침&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${spread.toFixed(2)}`;
+  }else{
+    prev={};if(gHi){gHi.gain.rampTo(0,0.3);gLo.gain.rampTo(0,0.3);}
+    hud.textContent='몸 전체가 보이게 서 주세요 · 请站在能看到全身的位置';
+  }
+  for(const p of particles){p.x+=p.vx;p.y+=p.vy;p.vx*=0.96;p.vy*=0.96;p.life-=0.02;ctx.fillStyle=`rgba(${p.c},${Math.max(0,p.life)})`;ctx.fillRect(p.x,p.y,2.5,2.5);}
+  particles=particles.filter(p=>p.life>0);
+}
+</script>
+</body>
+</html>

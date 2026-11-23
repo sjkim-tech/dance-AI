@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>듀엣 — a partner who isn't there</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Fraunces:ital@1&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#14110d;color:#efe6d6;font-family:'Noto Serif KR',serif;overflow:hidden}
+video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:.22;transition:opacity .3s;z-index:1;pointer-events:none}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#title{position:fixed;left:24px;top:20px;z-index:2;font-size:20px}
+#title i{display:block;font-family:'Fraunces',serif;font-size:13px;color:#d9a441;margin-top:2px}
+#top{position:fixed;right:24px;top:20px;z-index:4;display:flex;gap:8px;align-items:center;font:11px 'IBM Plex Mono',monospace}
+#top button{font:inherit;color:#efe6d6;background:transparent;border:1px solid #5a4d38;border-radius:999px;padding:5px 12px;cursor:pointer}
+#top button.on{border-color:#efe6d6;background:rgba(239,230,214,.12)}
+#top a{color:#b9a888;text-decoration:none;margin-left:6px}
+#caption{position:fixed;left:0;right:0;bottom:84px;text-align:center;z-index:2;font-size:15px;color:#d9a441;opacity:0;transition:opacity .6s}
+#picker{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:2;display:flex;border:1px solid #5a4d38;border-radius:999px;overflow:hidden;background:rgba(20,17,13,.7)}
+#picker button{font:inherit;font-size:14px;color:#b9a888;background:transparent;border:none;padding:10px 22px;cursor:pointer}
+#picker button small{font:10px 'IBM Plex Mono',monospace;margin-left:6px;opacity:.7}
+#picker button.on{background:#d9a441;color:#14110d}
+#start{position:fixed;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#14110d;text-align:center;padding:24px}
+#start h1{font-size:40px;font-weight:600}
+#start h1 i{display:block;font-family:'Fraunces',serif;font-size:18px;font-weight:400;color:#d9a441;margin-top:6px}
+#start p{color:#b9a888;font-size:15px;line-height:1.8;max-width:560px}
+#start button{font:inherit;font-size:16px;color:#14110d;background:#d9a441;border:none;border-radius:999px;padding:12px 32px;cursor:pointer}
+#msg{font:12px 'IBM Plex Mono',monospace;color:#d9a441;min-height:18px}
+</style>
+</head>
+<body>
+<video id="v" playsinline muted></video>
+<canvas id="c"></canvas>
+<div id="title">듀엣<i>a partner who isn't there</i></div>
+<div id="top"><button id="tVideo" class="on">영상 보이기</button><button id="tMe" class="on">나 보이기</button><a href="../Dance_AI_vibe_week13.html">← 13주차</a></div>
+<div id="caption"></div>
+<div id="picker">
+  <button data-m="echo" class="on">메아리<small>echo</small></button>
+  <button data-m="mirror">거울<small>mirror</small></button>
+  <button data-m="opposite">반대<small>opposite</small></button>
+</div>
+<div id="start">
+  <h1>듀엣<i>a partner who isn't there</i></h1>
+  <p>내 움직임에서 가상 파트너가 만들어집니다. 흰색이 나, 황토색이 파트너입니다. 아래에서 파트너의 규칙을 고르세요.<br>从我的动作中生成虚拟舞伴。白色是我,土黄色是舞伴。请在下方选择舞伴的规则。</p>
+  <button id="go">카메라 켜기 · 打开摄像头</button>
+  <div id="msg"></div>
+</div>
+<script type="module">
+import {FilesetResolver, PoseLandmarker} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const WASM="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+const MODEL="https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task";
+const video=document.getElementById('v'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const msg=document.getElementById('msg'),caption=document.getElementById('caption');
+const BONES=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28],[27,31],[28,32],[15,19],[16,20]];
+const CAP={echo:'메아리 — 2초 전의 내가 따라옵니다 · 2秒前的我跟过来',mirror:'거울 — 좌우가 반전된 나 · 左右翻转的我',opposite:'반대 — 골반을 축으로 뒤집힌 나 · 以骨盆为轴翻转的我'};
+let W,H,pose=null,lastTS=0,lastVT=-1,res=null,mode='echo',showMe=true,history=[],capTimer;
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;ctx.fillStyle='#14110d';}
+addEventListener('resize',resize);resize();
+function P(l){
+  const vw=video.videoWidth||1280,vh=video.videoHeight||720,s=Math.max(W/vw,H/vh);
+  const dw=vw*s,dh=vh*s,ox=(W-dw)/2,oy=(H-dh)/2;
+  return {x:W-(ox+l.x*dw),y:oy+l.y*dh,v:l.visibility??1};
+}
+function showCaption(){caption.textContent=CAP[mode];caption.style.opacity=1;clearTimeout(capTimer);capTimer=setTimeout(()=>caption.style.opacity=0,2600);}
+document.querySelectorAll('#picker button').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.m;document.querySelectorAll('#picker button').forEach(x=>x.classList.toggle('on',x===b));showCaption();
+});
+document.getElementById('tVideo').onclick=e=>{const on=e.target.classList.toggle('on');video.style.opacity=on?0.22:0;};
+document.getElementById('tMe').onclick=e=>{showMe=e.target.classList.toggle('on');};
+
+document.getElementById('go').onclick=async()=>{
+  try{
+    msg.textContent='카메라 켜는 중…';
+    const s=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720,facingMode:'user'},audio:false});
+    video.srcObject=s;await video.play();
+    msg.textContent='포즈 모델 불러오는 중…';
+    const fs=await FilesetResolver.forVisionTasks(WASM);
+    pose=await PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'GPU'},runningMode:'VIDEO',numPoses:1});
+    document.getElementById('start').style.display='none';showCaption();
+    requestAnimationFrame(loop);
+  }catch(e){msg.textContent='오류: '+e.message;}
+};
+
+// 파트너 규칙: 내 관절(0~1 좌표)에서 파트너의 관절을 만든다
+function partner(lm,now){
+  if(mode==='echo'){   // 2초 전의 내 포즈
+    let old=null;for(const h of history){if(h.t<=now-2000)old=h.lm;else break;}
+    return old;
+  }
+  if(mode==='mirror')return lm.map(p=>({...p,x:1-p.x}));   // x → 1 − x
+  const cx=(lm[23].x+lm[24].x)/2,cy=(lm[23].y+lm[24].y)/2;  // 골반 중심
+  return lm.map(p=>({...p,x:2*cx-p.x,y:2*cy-p.y}));        // 점 대칭
+}
+function body(lm,color,width){
+  const pts=lm.map(P);
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.lineCap='round';
+  for(const [a,b] of BONES){if(pts[a].v<0.4||pts[b].v<0.4)continue;ctx.beginPath();ctx.moveTo(pts[a].x,pts[a].y);ctx.lineTo(pts[b].x,pts[b].y);ctx.stroke();}
+  const r=Math.max(10,Math.hypot(pts[7].x-pts[8].x,pts[7].y-pts[8].y)*0.7);   // 머리
+  ctx.beginPath();ctx.arc(pts[0].x,pts[0].y,r,0,Math.PI*2);ctx.stroke();
+}
+function loop(){
+  requestAnimationFrame(loop);
+  const now=performance.now();
+  if(video.readyState>=2&&video.currentTime!==lastVT){
+    lastVT=video.currentTime;
+    const ts=Math.max(now,lastTS+1);lastTS=ts;
+    res=pose.detectForVideo(video,ts);
+    const lm=res.landmarks&&res.landmarks[0];
+    if(lm){history.push({t:now,lm});while(history.length&&history[0].t<now-4000)history.shift();}
+  }
+  // 잔상: 따뜻한 검정을 얇게 덮음
+  ctx.fillStyle='rgba(20,17,13,0.18)';ctx.fillRect(0,0,W,H);
+  const lm=res&&res.landmarks&&res.landmarks[0];
+  if(!lm)return;
+  const pt=partner(lm,now);
+  if(pt)body(pt,'#d9a441',5);
+  if(showMe)body(lm,'#efe6d6',4);
+}
+</script>
+</body>
+</html>

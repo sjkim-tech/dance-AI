@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BODY FLAPPY BIRD</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0a0f;color:#e8e8f0;font-family:'Noto Sans KR',sans-serif;overflow:hidden}
+#app{display:flex;height:100%}
+#left{width:40%;display:flex;flex-direction:column;border-right:2px solid #00ff88;padding:14px;gap:12px;min-width:0}
+#left h1{font:14px 'Press Start 2P',monospace;color:#00ff88;line-height:1.6}
+#left h1 a{float:right;font:12px 'Noto Sans KR',sans-serif;color:#8a8aa0;text-decoration:none}
+#cam{position:relative;flex:1;background:#000;border:1px solid #1f3d30;overflow:hidden;min-height:0}
+#cam video,#cam canvas{position:absolute;inset:0;width:100%;height:100%}
+#cam video{object-fit:cover;transform:scaleX(-1)}
+.stat{font-size:13px;display:flex;justify-content:space-between;border-bottom:1px solid #1c1c28;padding-bottom:6px}
+.stat b{font-weight:400;color:#00ff88}
+.stat b.off{color:#ff5577}
+#gaugeWrap{font-size:13px}
+#gaugeWrap span{float:right;font:12px 'Press Start 2P',monospace;color:#00ff88}
+#gauge{height:16px;background:#16161f;border:1px solid #2a2a3a;margin-top:6px}
+#gauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00ff88,#ffe14d,#ff5577)}
+.tip{font-size:12px;color:#8a8aa0;line-height:1.6}
+#right{flex:1;position:relative;min-width:0}
+#game{width:100%;height:100%;display:block;image-rendering:pixelated}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:rgba(10,10,15,.86);text-align:center;padding:20px}
+.overlay h2{font:26px 'Press Start 2P',monospace;color:#00ff88;line-height:1.6;text-shadow:0 0 18px #00ff88}
+.overlay p{font-size:14px;color:#b8b8c8;line-height:1.8}
+.overlay .sc{font:14px 'Press Start 2P',monospace;color:#ffe14d;line-height:2}
+.overlay button{font:14px 'Press Start 2P',monospace;color:#0a0a0f;background:#00ff88;border:none;padding:14px 28px;cursor:pointer}
+.overlay button:hover{background:#ffe14d}
+#over{display:none}
+@media(max-width:760px){#app{flex-direction:column}#left{width:100%;height:42%;border-right:none;border-bottom:2px solid #00ff88}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="left">
+    <h1>BODY FLAPPY BIRD<a href="../Dance_AI_vibe_week13.html">← 13주차</a></h1>
+    <div id="cam"><video id="v" playsinline muted></video><canvas id="sk"></canvas></div>
+    <div class="stat">카메라 · 摄像头<b id="sCam" class="off">OFF</b></div>
+    <div class="stat">포즈 감지 · 姿势检测<b id="sPose" class="off">NO</b></div>
+    <div id="gaugeWrap">팔 올림 · 手臂高度<span id="gPct">0%</span><div id="gauge"><i id="gBar"></i></div></div>
+    <div class="tip">두 손을 올리면 새가 위로, 내리면 아래로 갑니다. 스페이스바로도 됩니다.<br>举起双手小鸟向上,放下向下。也可以用空格键。</div>
+  </div>
+  <div id="right">
+    <canvas id="game"></canvas>
+    <div class="overlay" id="intro">
+      <h2>BODY<br>FLAPPY BIRD</h2>
+      <p>몸으로 조작하는 플래피버드<br>用身体操作的 Flappy Bird</p>
+      <button id="startBtn">START</button>
+      <p id="msg"></p>
+    </div>
+    <div class="overlay" id="over">
+      <h2 style="color:#ff5577;text-shadow:0 0 18px #ff5577">GAME OVER</h2>
+      <div class="sc">SCORE <span id="oScore">0</span><br>BEST <span id="oBest">0</span></div>
+      <button id="againBtn">RETRY</button>
+    </div>
+  </div>
+</div>
+<script type="module">
+import {FilesetResolver, PoseLandmarker} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const WASM="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm";
+const MODEL="https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task";
+const $=id=>document.getElementById(id);
+const video=$('v'),sk=$('sk'),sctx=sk.getContext('2d'),game=$('game'),g=game.getContext('2d');
+const BONES=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]];
+const GROUND=56;
+let W,H,pose=null,lastTS=0,lastVT=-1,hasPose=false,handY=0.5;
+let state='intro',bird,pipes,frame,score,best=0;
+try{best=+localStorage.getItem('bodyflappy-best')||0;}catch(e){}
+
+function resize(){
+  W=game.width=game.clientWidth;H=game.height=game.clientHeight;
+  sk.width=sk.clientWidth;sk.height=sk.clientHeight;
+}
+addEventListener('resize',resize);resize();
+function reset(){bird={y:(H-GROUND)/2,vy:0};pipes=[];frame=0;score=0;}
+reset();
+
+$('startBtn').onclick=async()=>{
+  $('msg').textContent='카메라와 포즈 모델을 불러오는 중…';
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'},audio:false});
+    video.srcObject=s;await video.play();
+    $('sCam').textContent='ON';$('sCam').classList.remove('off');
+    const fs=await FilesetResolver.forVisionTasks(WASM);
+    pose=await PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'GPU'},runningMode:'VIDEO',numPoses:1});
+  }catch(e){$('msg').textContent='카메라 없이 시작합니다 (스페이스바) · '+e.message;await new Promise(r=>setTimeout(r,1200));}
+  $('intro').style.display='none';resize();reset();state='play';
+};
+$('againBtn').onclick=()=>{$('over').style.display='none';reset();state='play';};
+addEventListener('keydown',e=>{
+  if(e.code!=='Space')return;e.preventDefault();
+  if(state==='over'){$('againBtn').click();return;}
+  if(state==='play'&&!hasPose)bird.vy=-8;   // 포즈가 없을 때는 스페이스바로
+});
+
+function detect(){
+  if(!pose||video.readyState<2||video.currentTime===lastVT)return;
+  lastVT=video.currentTime;
+  const ts=Math.max(performance.now(),lastTS+1);lastTS=ts;
+  const res=pose.detectForVideo(video,ts);
+  const lm=res.landmarks&&res.landmarks[0];
+  sctx.clearRect(0,0,sk.width,sk.height);
+  hasPose=!!lm;
+  $('sPose').textContent=hasPose?'YES':'NO';$('sPose').classList.toggle('off',!hasPose);
+  if(!lm)return;
+  // 스켈레톤 (네온 그린). 영상과 같은 방식으로 채우고 좌우 반전
+  const vw=video.videoWidth,vh=video.videoHeight,s=Math.max(sk.width/vw,sk.height/vh),dw=vw*s,dh=vh*s,ox=(sk.width-dw)/2,oy=(sk.height-dh)/2;
+  const P=l=>({x:sk.width-(ox+l.x*dw),y:oy+l.y*dh});
+  sctx.strokeStyle='#00ff88';sctx.fillStyle='#00ff88';sctx.lineWidth=3;sctx.shadowColor='#00ff88';sctx.shadowBlur=8;
+  for(const [a,b] of BONES){const A=P(lm[a]),B=P(lm[b]);sctx.beginPath();sctx.moveTo(A.x,A.y);sctx.lineTo(B.x,B.y);sctx.stroke();}
+  for(const i of [15,16]){const p=P(lm[i]);sctx.beginPath();sctx.arc(p.x,p.y,8,0,Math.PI*2);sctx.fill();}
+  // 양손목의 평균 Y (0=위, 1=아래)
+  handY=Math.max(0,Math.min(1,(lm[15].y+lm[16].y)/2));
+  const pct=Math.round((1-handY)*100);
+  $('gPct').textContent=pct+'%';$('gBar').style.width=pct+'%';
+}
+
+/* ───── 그리기 ───── */
+const BIRD=["..YYYYY...",".YYYYWWY..","YYYYYWKWY.","YYYYYYWWOO","YPPYYYYOOO",".YYYYYYY..","..YYYYY..."];
+const COL={Y:'#ffd93b',W:'#ffffff',K:'#111111',O:'#ff8a3d',P:'#ff9ecb'};
+function drawBird(x,y){
+  const s=5,bx=x-BIRD[0].length*s/2,by=y-BIRD.length*s/2;
+  BIRD.forEach((row,r)=>[...row].forEach((ch,c)=>{if(ch==='.')return;g.fillStyle=COL[ch];g.fillRect(bx+c*s,by+r*s,s,s);}));
+  const up=Math.floor(frame/6)%2===0;   // 펄럭이는 날개
+  g.fillStyle='#e6a800';g.fillRect(bx+s,by+(up?1:3)*s,s*3,s*2);
+}
+function drawPipe(p,gap){
+  const w=72,top=p.gapY-gap/2,bot=p.gapY+gap/2;
+  const gr=g.createLinearGradient(p.x,0,p.x+w,0);gr.addColorStop(0,'#1e8f3e');gr.addColorStop(.35,'#7be07a');gr.addColorStop(1,'#14692c');
+  g.fillStyle=gr;g.fillRect(p.x,0,w,top);g.fillRect(p.x,bot,w,H-GROUND-bot);
+  g.fillRect(p.x-6,top-26,w+12,26);g.fillRect(p.x-6,bot,w+12,26);
+  g.strokeStyle='#0b3d18';g.lineWidth=3;
+  g.strokeRect(p.x,-3,w,top+3);g.strokeRect(p.x,bot,w,H-GROUND-bot+3);g.strokeRect(p.x-6,top-26,w+12,26);g.strokeRect(p.x-6,bot,w+12,26);
+}
+function cloud(x,y,s){g.fillRect(x,y,60*s,16*s);g.fillRect(x+12*s,y-10*s,34*s,12*s);}
+
+function tick(){
+  requestAnimationFrame(tick);
+  detect();
+  const gap=H*0.52,bx=W*0.28,playH=H-GROUND;
+  if(state==='play'){
+    frame++;
+    if(hasPose){   // 스프링 물리로 손 높이를 따라감
+      const target=handY*playH;
+      bird.vy+=(target-bird.y)*0.18;bird.vy*=0.72;bird.y+=bird.vy;
+    }else{bird.vy+=0.45;bird.y+=bird.vy;}
+    bird.y=Math.max(18,Math.min(playH-18,bird.y));if(bird.y>=playH-18||bird.y<=18)bird.vy=0;
+    if(frame%130===0)pipes.push({x:W+10,gapY:gap/2+30+Math.random()*(playH-gap-60),passed:false});
+    for(const p of pipes){
+      p.x-=3;
+      if(!p.passed&&p.x+72<bx){p.passed=true;score++;}
+      if(bx+20>p.x&&bx-20<p.x+72&&(bird.y-14<p.gapY-gap/2||bird.y+14>p.gapY+gap/2)){
+        state='over';best=Math.max(best,score);try{localStorage.setItem('bodyflappy-best',best);}catch(e){}
+        $('oScore').textContent=score;$('oBest').textContent=best;$('over').style.display='flex';
+      }
+    }
+    pipes=pipes.filter(p=>p.x>-100);
+  }
+  // 배경
+  g.fillStyle='#0a0a0f';g.fillRect(0,0,W,H);
+  g.fillStyle='#161624';const t=state==='play'?frame:performance.now()/16;
+  for(let i=0;i<5;i++)cloud(((i*260-t*0.3)%(W+200)+W+200)%(W+200)-100,60+i%3*70,1.4);
+  g.fillStyle='#22223a';
+  for(let i=0;i<4;i++)cloud(((i*340-t*0.8)%(W+200)+W+200)%(W+200)-100,120+i%2*110,1);
+  for(const p of pipes)drawPipe(p,gap);
+  // 땅
+  g.fillStyle='#12121c';g.fillRect(0,playH,W,GROUND);
+  g.fillStyle='#00ff88';g.fillRect(0,playH,W,3);
+  g.fillStyle='#1d3a2c';for(let x=-((t*3)%40);x<W;x+=40)g.fillRect(x,playH+14,20,6);
+  drawBird(bx,bird.y);
+  g.fillStyle='#fff';g.font="22px 'Press Start 2P',monospace";g.textAlign='center';g.fillText(score,W/2,54);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

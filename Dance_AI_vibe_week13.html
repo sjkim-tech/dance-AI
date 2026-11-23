@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바이브코딩 예시 — 13주차</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--paper:#FBFAF7;--ink:#1B2A41;--ink-2:#4A5568;--ink-3:#8A94A6;--line:#DDD8CF;--well:#F1EEE7;--coral:#E8674B;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Gowun Dodum','Malgun Gothic',sans-serif}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.zh{display:block;font-size:.78em;color:var(--ink-3)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+header h1{font-size:26px;font-weight:400;line-height:1.25}
+header h1 .zh{font-size:14px;margin-top:2px}
+.course{font-family:var(--mono);font-size:12px;color:var(--ink-2);text-align:right;line-height:1.7}
+
+.how{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff;margin-bottom:26px}
+.how>div{padding:14px 16px;border-right:1px solid var(--line);font-size:14px}
+.how>div:last-child{border-right:none}
+.how .n{font-family:var(--mono);color:var(--coral);margin-right:6px}
+.how .zh{font-size:12px;margin-top:2px}
+@media(max-width:860px){.how{grid-template-columns:1fr 1fr}.how>div{border-bottom:1px solid var(--line)}}
+
+.btn{border:1.5px solid var(--ink);background:#fff;border-radius:6px;padding:8px 14px;font-size:14px;line-height:1.3;transition:background .15s,color .15s;text-decoration:none;color:var(--ink);display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--ink);color:#fff}
+.btn.primary{background:var(--coral);border-color:var(--coral);color:#fff}
+.btn.primary:hover{background:#C9502F;border-color:#C9502F}
+.btn .zh{display:inline;color:inherit;opacity:.7;font-size:.8em}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn.done{border-color:#1F7A6B;background:#1F7A6B;color:#fff}
+
+.ex{border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden;margin-bottom:18px;scroll-margin-top:70px}
+.ex-h{padding:14px 16px;display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.ex-h .no{font-family:var(--mono);font-size:13px;color:var(--coral);margin-top:4px}
+.ex-h .t{flex:1;min-width:220px}
+.ex-h .t b{font-weight:400;font-size:19px}
+.ex-h .t .zh{display:inline;margin-left:8px}
+.ex-h .t p{font-size:13.5px;color:var(--ink-2);margin-top:4px}
+.ex-h .t p .zh{display:block;margin:0;font-size:12px}
+.ex-h .acts{display:flex;gap:8px;flex-wrap:wrap}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.tags span{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--well);border-radius:4px;padding:1px 7px}
+pre{margin:0;padding:14px 16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12.5px;line-height:1.75;white-space:pre-wrap;color:var(--ink);background:var(--paper)}
+mark{background:#FFF3EF;color:#B23A1E;border-radius:3px;padding:0 2px}
+.var{border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:flex-start}
+.var p{flex:1;font-family:var(--mono);font-size:12.5px;line-height:1.75}
+.tipline{border-top:1px solid var(--line);padding:10px 16px;font-size:13px;color:#B23A1E;background:#FFF3EF}
+.tipline .zh{font-size:12px;color:#B23A1E;opacity:.75}
+
+h2.sec{font-size:19px;font-weight:400;margin:30px 0 12px}
+h2.sec .zh{display:inline;margin-left:8px;font-size:13px}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.tools{grid-template-columns:1fr}}
+.tool{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-size:14px;color:var(--ink-2)}
+.tool b{font-weight:400;font-size:17px;color:var(--ink)}
+.tool b .zh{display:inline;margin-left:8px;font-size:12px}
+.tool p{margin-top:6px}
+.tool a{display:inline-block;margin-top:8px;color:var(--coral);font-family:var(--mono);font-size:13px}
+.note{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13.5px;color:var(--ink-2)}
+.note b{font-weight:400;color:var(--ink)}
+.note li{margin:4px 0 0 18px}
+.note .zh{font-size:12px}
+</style>
+</head>
+<body>
+<script src="gnb.js"></script>
+<div class="wrap">
+
+<header>
+  <h1>바이브코딩 예시<span class="zh">Vibe Coding 示例</span></h1>
+  <div class="course">Dance &amp; AI · 13주차 · 예시 프로젝트</div>
+</header>
+
+<div class="how">
+  <div><span class="n">1</span>[시연 열기]로 어떤 작품인지 먼저 봅니다<span class="zh">先点击 [打开演示] 看看是什么作品</span></div>
+  <div><span class="n">2</span>[프롬프트 복사]를 눌러 평소 쓰는 대화형 AI에 붙여 넣습니다<span class="zh">点击 [复制提示词],粘贴到平时用的对话式 AI</span></div>
+  <div><span class="n">3</span>AI가 만든 HTML을 실행하고 카메라를 허용합니다<span class="zh">运行 AI 制作的 HTML,并允许使用摄像头</span></div>
+  <div><span class="n">4</span>마지막 줄의 컨셉과 매핑을 바꿔 내 작품으로 만듭니다<span class="zh">修改最后一行的概念和映射,做成自己的作品</span></div>
+</div>
+
+<div id="list"></div>
+
+<h2 class="sec">음악과 영상 만들기<span class="zh">音乐与视频 · 课堂上不做练习</span></h2>
+<div class="tools">
+  <div class="tool"><b>Suno — 음악 만들기<span class="zh">生成音乐</span></b><p>글로 분위기·장르·빠르기를 적으면 음악을 만들어 줍니다.<br>쓸 곳: 내 작품의 배경 음악, 수업용 리듬 음원.</p><a href="https://suno.com" target="_blank" rel="noopener">suno.com</a></div>
+  <div class="tool"><b>Higgsfield — 영상 만들기<span class="zh">生成视频</span></b><p>사진이나 글에서 짧은 영상을 만들어 줍니다.<br>쓸 곳: 작품 티저, 댄스필름의 장면 스케치.</p><a href="https://higgsfield.ai" target="_blank" rel="noopener">higgsfield.ai</a></div>
+</div>
+<div class="note"><b>쓰기 전에 확인할 것 · 使用前请确认</b>
+  <ul>
+    <li>무료로 만들 수 있는 양과 결과물 사용 조건은 서비스마다 다르고 자주 바뀝니다. 가입 화면에서 직접 확인하세요.</li>
+    <li>만든 음악·영상을 발표에 쓸 때는 어떤 도구로 만들었는지 밝혀 주세요.</li>
+  </ul>
+  <p style="margin-top:8px;color:var(--coral)">기말 프로젝트의 주제에 필요할 때 써 보세요.</p>
+</div>
+</div>
+
+<script>
+const EX=[
+ {id:'face',t:'얼굴',z:'脸',demo:'week13/face.html',title:'표정의 잔상',
+  d:'미소는 색온도, 눈썹 올림은 입자 상승, 깜빡임은 화면 섬광이 됩니다.',dz:'微笑是色温,抬眉是粒子上升,眨眼是画面闪光。',
+  tags:['MediaPipe Face Landmarker','478 landmarks','52 blendshapes'],
+  p:`MediaPipe Face Landmarker(Tasks Vision API)를 써서 카메라로 얼굴을 추적하고 실시간 시각화하는 단일 HTML 파일을 만들어주세요. 478개의 랜드마크와 52개의 블렌드셰이프 값을 활용합니다.
+
+기술 데모가 아니라 갤러리에 어울리는 톤. 행복·슬픔 같은 감정 라벨링은 피하고, 표정의 결 자체를 이미지로 옮깁니다. 따뜻한 톤이 섞인 거의 검은색 배경에 웜 오프 화이트와 황토색 액센트. 매 프레임 캔버스를 완전히 지우지 말고 반투명한 어두운 사각형으로 살짝 덮어 부드러운 잔상이 남게.
+
+기술적으로 반드시: tasks-vision 최신 버전 사용. runningMode: "VIDEO". detectForVideo의 timestamp는 단조 증가 (Math.max(performance.now(), lastTS+1)). 카메라 접근은 사용자 클릭 후에만. 모든 의존성 CDN, 단일 HTML 파일.
+
+이번 작업의 컨셉은 [표정의 잔상]. 핵심 매핑은 [미소는 색온도, 눈썹 올림은 입자 상승, 깜빡임은 화면 섬광으로].`,
+  vars:[
+   `이번 작업의 컨셉은 [시선의 궤적]. 핵심 매핑은 [눈동자 방향은 화면에 빛이 그어지는 방향, 깜빡임은 궤적의 끊김, 한 곳을 오래 응시하면 그 위치에 빛이 모임으로]. 어디를 보는지가 드로잉처럼 화면에 누적되는 작품.`,
+   `이번 작업의 컨셉은 [침묵이 깊을수록]. 핵심 매핑은 [모든 표정이 멈출수록 입자가 풍성해지고, 작은 움직임 하나가 큰 잔물결이 되며, 정적의 지속 시간은 색의 농도로]. 가만히 있을수록 화면이 풍성해지는, 정적과 움직임이 뒤집힌 작품.`],
+  tip:'마지막 한 줄(컨셉/매핑)만 바꾸면 같은 시스템에서 전혀 다른 작품이 나옵니다. 변형해보세요.',tipz:'只改最后一行(概念/映射),同一个系统就会做出完全不同的作品。请试着改一改。'},
+ {id:'hand',t:'손 (실)',z:'手(线)',demo:'week13/hand.html',title:'실 — stretch to snap',
+  d:'두 손 사이에 실 다섯 개가 이어지고, 2.4배 넘게 당기면 끊어집니다.',dz:'两只手之间连上五条线,拉到 2.4 倍以上就会断。',
+  tags:['MediaPipe Hands','42 joints'],
+  p:`MediaPipe Hands(Tasks Vision API, 최신 버전)로 양손 42개의 관절을 추적하는 단일 HTML 파일을 만들어주세요. numHands: 2.
+
+양손이 처음 함께 보일 때, 양손의 관절들 사이에 색색의 "탄성 실" 5개가 자동으로 연결됩니다. 각 실은 첫 길이를 자연 길이로 기억하고, 2.4배 이상 늘어나면 끊어지면서 입자가 폭발하듯 흩어집니다. 화면 하단에 남아 있는 실 개수 카운터, 우상단에 RESET 버튼.
+
+웹캠 영상이 배경에 보이고 그 위로 빛나는 점과 실이 떠 있습니다. shadowBlur로 글로우, lighter 합성으로 색이 더해지는 느낌. 점과 실은 다채로운 색조(핑크/오렌지/민트/시안/라일락 등). 매 프레임 캔버스를 globalCompositeOperation = "destination-out"으로 페이드해 잔향을 만들고, 어두운 색으로 덮지 마세요(웹캠이 가려집니다).
+
+detectForVideo timestamp는 단조 증가. 카메라는 사용자 클릭 후 시작. 의존성 CDN, 단일 HTML. 컨셉은 [실 — stretch to snap].`},
+ {id:'resonance',t:'몸 (공명)',z:'身体(共鸣)',demo:'week13/resonance.html',title:'공명',
+  d:'오른손은 고음, 왼손은 저음. 몸을 펼치면 음색이 밝아지고 빠른 움직임은 타악이 됩니다. 소리가 납니다.',dz:'右手是高音,左手是低音。身体展开音色变亮,快速的动作变成打击声。会发出声音。',
+  tags:['MediaPipe Pose Landmarker','Tone.js'],
+  p:`MediaPipe Pose Landmarker(Tasks Vision API, 최신 버전)와 Tone.js를 써서, 카메라로 전신을 추적하고 움직임을 소리와 시각으로 옮기는 단일 HTML 파일을 만들어주세요.
+
+웹캠 영상이 배경에 보이고, 그 위로 손과 발의 잔상과 입자가 떠 있습니다. 오른손이 올라가면 고음, 왼손이 올라가면 저음, 몸이 펼쳐지면 음색이 밝아지고, 빠른 움직임은 짧은 타악이 됩니다.
+
+분위기는 갤러리에 어울리는 톤. 따뜻한 검정 배경에 웜 오프화이트와 황토색. 매 프레임 캔버스를 globalCompositeOperation = "destination-out"으로 부드럽게 페이드시켜 잔향을 만들고, 절대 어두운 색으로 덮지 마세요(웹캠이 가려집니다).
+
+우하단에 슬라이더 세 개 — 영상 투명도, 소리 볼륨, 잔상 길이. 카메라와 오디오는 사용자 클릭 이후에 시작. detectForVideo의 timestamp는 단조 증가. 모든 의존성 CDN, 단일 HTML.
+
+이번 작업의 컨셉은 [공명].`},
+ {id:'duet',t:'몸 (듀엣)',z:'身体(双人舞)',demo:'week13/duet.html',title:'듀엣 — a partner who isn\'t there',
+  d:'내 움직임에서 가상 파트너가 만들어집니다. 메아리, 거울, 반대 세 가지 규칙을 고릅니다.',dz:'从我的动作中生成虚拟舞伴。可以选择回声、镜子、相反三种规则。',
+  tags:['MediaPipe Pose Landmarker','33 joints'],
+  p:`MediaPipe Pose Landmarker(Tasks Vision API, 최신 버전)로 한 사람의 전신 33개 관절을 추적하는 단일 HTML 파일을 만들어주세요. numPoses: 1.
+
+화면에 두 개의 몸이 떠 있습니다 — 웹캠으로 추적되는 "나"와, 내 움직임에서 파생되는 "가상 파트너". 하단 가운데에 알약 모양 픽커로 세 가지 파트너 규칙을 고를 수 있어요:
+
+ - 메아리(echo): 2초 전의 내 포즈를 그대로 따라 함
+ - 거울(mirror): 좌우가 반전된 나 (x → 1 − x)
+ - 반대(opposite): 골반을 축으로 점 대칭된 나 (상하좌우 반전)
+
+분위기는 갤러리 톤. 따뜻한 검정 배경에 웜 오프화이트(나)와 황토색(파트너). 매 프레임 캔버스 위에 rgba(20,17,13,0.18)을 덮어 부드러운 잔상을 만들어요. 한글 우선(Noto Serif KR), 영문은 Fraunces 이탤릭, 데이터 라벨은 IBM Plex Mono.
+
+좌상단 작품 제목, 우상단에 작은 토글들(영상 보이기 / 나 보이기). 영상 토글은 끄면 opacity 0, 켜면 0.22. 픽커 위에 파트너 설명 캡션이 잠깐 떴다가 사라지게요.
+
+detectForVideo timestamp는 단조 증가. 카메라는 사용자 클릭 후 시작. 의존성 CDN, 단일 HTML. 컨셉은 [듀엣 — a partner who isn't there].`},
+ {id:'game',t:'몸 (게임)',z:'身体(游戏)',demo:'week13/flappy.html',title:'BODY FLAPPY BIRD',
+  d:'두 손을 올리고 내려서 새를 조종합니다.',dz:'举起和放下双手来控制小鸟。',
+  tags:['MediaPipe Pose','게임'],
+  p:`MediaPipe Pose로 한 사람의 양손목 위치를 추적해서, 그걸로 플래피 버드를 조작하는 단일 HTML 파일을 만들어주세요.
+
+화면은 두 패널 분할 — 왼쪽 40%에 웹캠 + 포즈 스켈레톤(네온 그린) + 카메라 상태/포즈 감지 상태 표시 + 팔 올림 % 게이지(0~100% 그라데이션 바). 오른쪽엔 게임 캔버스.
+
+새의 목표 Y는 양손목의 평균 Y에 직접 매핑. 따라가는 방식은 스프링 물리 — vy += (target − bird.y) * 0.18; vy *= 0.72; y += vy. 손을 올리면 새가 위로, 내리면 떨어지는 부드러운 추종. 키보드 스페이스바도 fallback으로요. MediaPipe의 Y(0=위, 1=아래)는 canvas Y와 같은 방향이라 직접 매핑하면 됩니다.
+
+시각은 레트로 픽셀 아케이드. 다크 배경 #0a0a0f에 네온 그린 #00ff88 액센트, 헤더와 점수는 Press Start 2P 폰트, 본문은 Noto Sans KR. 새는 노란색 픽셀 아트(볼터치 + 펄럭이는 날개), 파이프는 클래식 마리오풍 초록 튜브에 그라데이션, 배경에 패럴랙스 구름과 스크롤하는 땅.
+
+파이프는 130프레임마다 스폰, 갭은 캔버스 높이의 52%(몸 조작용으로 넓게). 통과할 때마다 점수 +1, 충돌하면 GAME OVER 화면(점수 + best). 시작 화면 오버레이에 "BODY FLAPPY BIRD" 큰 제목 + START 버튼.
+
+카메라는 START 버튼 클릭 후 시작. 의존성 CDN, 단일 HTML. 컨셉은 [몸으로 조작하는 플래피버드].`},
+];
+const TXT=[];
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const mark=s=>esc(s).replace(/\[[^\]]+\]/g,m=>`<mark>${m}</mark>`);   // 바꿔 볼 자리 표시
+function reg(t){TXT.push(t);return TXT.length-1;}
+document.getElementById('list').innerHTML=EX.map((e,i)=>`<div class="ex" id="${e.id}">
+  <div class="ex-h"><span class="no">0${i+1}</span>
+    <div class="t"><b>${e.t}</b><span class="zh">${e.z}</span><p>「${esc(e.title)}」 ${e.d}<span class="zh">${e.dz}</span></p><div class="tags">${e.tags.map(x=>`<span>${x}</span>`).join('')}</div></div>
+    <div class="acts"><a class="btn" href="${e.demo}" target="_blank">▶ 시연 열기<span class="zh">打开演示</span></a><button class="btn primary" onclick="copyT(${reg(e.p)},this)">프롬프트 복사<span class="zh">复制提示词</span></button></div>
+  </div>
+  <pre>${mark(e.p)}</pre>
+  ${(e.vars||[]).map((v,k)=>`<div class="var"><p>${k===0?'<b style="font-family:var(--sans);font-weight:400;color:var(--coral)">변형 · 마지막 줄만 바꾸기 / 变形 · 只改最后一行</b><br>':''}${mark(v)}</p><button class="btn sm" onclick="copyT(${reg(v)},this)">복사<span class="zh">复制</span></button></div>`).join('')}
+  ${e.tip?`<div class="tipline">${e.tip}<span class="zh">${e.tipz}</span></div>`:''}
+</div>`).join('');
+async function copyT(i,btn){
+  try{await navigator.clipboard.writeText(TXT[i]);const o=btn.innerHTML;btn.classList.add('done');btn.innerHTML='복사됨<span class="zh">已复制</span>';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=o;},1500);}
+  catch(e){alert('복사하지 못했습니다. 직접 선택해 복사하세요.');}
+}
+</script>
+</body>
+</html>

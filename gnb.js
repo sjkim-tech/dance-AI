@@ -9,6 +9,7 @@
         { href: 'Dance_AI_p5_week6.html', label: 'Week 6~7 · p5.js 그려보기' },
         { href: 'Dance_AI_p5_play_week6.html', label: 'Week 6~7 · 더 놀아보기' },
         { href: 'Dance_AI_p5_model_week6.html', label: 'Week 7 · 동작 모델 연결' },
+        { href: 'Dance_AI_vibe_week13.html', label: 'Week 13 · 바이브코딩 예시' },
     ];
     const LINKS = [
         { href: 'index.html#overview', label: 'Overview' },
